@@ -1,0 +1,86 @@
+/*
+ * Controller.cpp
+ *
+ *  Created on: Mar 11, 2024
+ *      Author: andre
+ */
+
+#include <iostream>
+#include <iomanip>
+#include <memory>
+#include <exception>
+
+
+#include "Menu.h"
+#include "Controller.h"
+
+
+using namespace std;
+
+Controller::Controller()
+	{
+cout << "Constructor" << endl;
+	}
+
+Controller::~Controller()
+	{
+ // nothing
+	}
+
+void Controller::start()
+	{
+	vector<string> menuItens
+		{ "Series", "Relatorios", "Ajuda", "Creditos", "Sair" };
+	vector<void (Controller::*)()> functions
+		{ &Controller::actionMovement, &Controller::actionUsers, &Controller::actionReports, &Controller::actionHelp, &Controller::actionAbout };
+	launchActions("Main Menu", menuItens, functions);
+	}
+
+void Controller::actionMovement(void)
+	{
+	cout << "actionMovement" << endl;
+	}
+
+void Controller::actionRecurrent(void)
+	{
+	cout << "actionUsers" << endl;
+	}
+
+void Controller::actionUsers(void)
+	{
+	cout << "actionUsers" << endl;
+	}
+
+void Controller::actionReports(void)
+	{
+	cout << "actionReports" << endl;
+	}
+
+void Controller::actionHelp(void)
+	{
+	cout << "actionHelp" << endl;
+	}
+
+void Controller::actionAbout(void)
+	{
+	cout << "actionAbout" << endl;
+	}
+
+void Controller::launchActions(string title, vector<string> menuItens, vector<void (Controller::*)()> functions)
+	{
+	try
+		{
+		Menu menu(menuItens, title, "Your option: ");
+		menu.setSymbol("*");
+
+		while (int choice = menu.getChoice())
+			{
+			(this->*functions.at(choice - 1))();
+			}
+		}
+	catch (const exception &myException)
+		{
+		cout << " ERRRRRRRRou!" << endl;
+		}
+
+	}
