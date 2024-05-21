@@ -9,16 +9,28 @@
 #include <iomanip>
 #include <memory>
 #include <exception>
+#include <vector>
 
 #include "Menu.h"
 #include "Controller.h"
 #include "Serie.h"
+#include "MemoryDBConnection.h"
 
 using namespace std;
 
 Controller::Controller()
 {
 	cout << "Constructor" << endl;
+	memoryDBConnection = new MemoryDBConnection();
+
+	vector<Serie> series {  
+		Serie(4, "Elementary", 2024, 3, 24, {"Fernanda", "Chika", "Ste"}, {"Enzo", "Pietra"}, "Netflix", 8),
+		Serie(4, "Elementary", 2024, 3, 24, {"Fernanda", "Chika", "Ste"}, {"Enzo", "Pietra"}, "Netflix", 8),
+		Serie(4, "Elementary", 2024, 3, 24, {"Fernanda", "Chika", "Ste"}, {"Enzo", "Pietra"}, "Netflix", 8),
+	};
+
+	serieDAO = new SerieMemDAO(new MemoryDBConnection());
+	
 }
 
 Controller::~Controller()

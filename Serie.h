@@ -30,7 +30,7 @@ class Serie
         virtual ~Serie();
 		
         int getId() const;
-      //  void setId(int id);
+        void setId(int id);
 
 		string getName();
         void setName(string name);

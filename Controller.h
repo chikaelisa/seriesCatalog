@@ -11,12 +11,15 @@
 #include <string>
 #include <vector>
 
+#include "MemoryDBConnection.h"
 
 using namespace std;
 
 class Controller final
 	{
 	private:
+		MemoryDBConnection *memoryDBConnection;
+
 		void actionMovement(void);
 		void actionRecurrent(void);
 		void actionUsers(void);

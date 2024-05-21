@@ -38,7 +38,10 @@ using namespace std;
             return id;
         }
 
-       // void setId(int id);
+       void Serie::setId(int id) 
+       {
+          this->id = id;
+       }
 
 		string Serie::getName()
         {
