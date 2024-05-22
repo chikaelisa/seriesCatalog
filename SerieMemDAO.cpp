@@ -18,7 +18,6 @@ vector<Serie *> SerieMemDAO::getAllSeries()
 
 Serie *SerieMemDAO::getSerieId(int serieId)
 {
-	cout << "To no getSerieId" << endl;
 	vector<Serie *> &series = memoryDBConnection->getSerieList();
 	vector<Serie *>::iterator seriesIterator = series.begin();
 	Serie *buffer = NULL;
@@ -29,19 +28,19 @@ Serie *SerieMemDAO::getSerieId(int serieId)
 
 		if ((*seriesIterator)->getId() == serieId)
 		{
-			cout << "To no if" << endl;
 			found = true;
 			buffer = *seriesIterator;
 		}
 		seriesIterator++;
 	}
-	cout << "Terminei o metodo" << endl;
 
 	return (buffer);
 }
 
 void SerieMemDAO::addSerie(Serie *serie)
 {
+	cout << "Estou no addSerie-------" << endl;
+	serie->getAllInfo();
 	serie->setId(++lastSerieId);
 	(memoryDBConnection->getSerieList()).push_back(serie);
 }

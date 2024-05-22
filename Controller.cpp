@@ -1,10 +1,3 @@
-/*
- * Controller.cpp
- *
- *  Created on: Mar 11, 2024
- *      Author: andre
- */
-
 #include <iostream>
 #include <iomanip>
 #include <memory>
@@ -46,13 +39,8 @@ void Controller::start()
 void Controller::seriesMenu(void)
 {
 	vector<string> menuItens{"Cadastrar nova serie", "Consultar serie", "Editar serie", "Excluir serie", "Voltar"};
-	vector<void (Controller::*)()> functions{&Controller::addSerie, &Controller::consultSerie, &Controller::actionReports, &Controller::actionHelp, &Controller::actionAbout};
+	vector<void (Controller::*)()> functions{&Controller::addSerie, &Controller::consultSerie, &Controller::editSerie, &Controller::actionHelp, &Controller::actionAbout};
 	launchActions("Gerenciar Series", menuItens, functions);
-	// 	Serie serie1(4, "Elementary", 2024, 3, 24, {"Fernanda", "Chika", "Ste"}, {"Enzo", "Pietra"}, "Netflix", 8);
-	// int rate = serie1.getRating();
-	// cout << "Nome da serie: " << serie1.getName() << endl;
-	// cout << "Nota da serie: " << to_string(rate) << endl;
-	// cout << "Nome dos personagens: " << serie1.getCharacters() << endl;
 }
 
 void Controller::addSerie(void)
@@ -107,6 +95,12 @@ void Controller::addSerie(void)
 
 void Controller::consultSerie(void)
 {
+	vector<Serie *> allseries = serieMemDAO->getAllSeries();
+	// for (int i = 0; i < allseries.size(); i++)
+	// {
+	// 	allseries[i]->getAllInfo();
+	// }
+
 	int id;
 	cout << "Digite o ID da serie" << endl;
 	cin >> id;
@@ -124,6 +118,80 @@ void Controller::consultSerie(void)
 	}
 }
 
+void Controller::editSerie(void)
+{
+	int id;
+	cout << "Digite o ID da serie" << endl;
+	cin >> id;
+	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+	Serie *serie = serieMemDAO->getSerieId(id);
+
+	// Serie a = *serie; como passar um valor por copia e nao referencia?  como utilizar o update:
+
+	if (serie != NULL)
+	{
+		string name;
+		cout << "Digite o nome da serie" << endl;
+		getline(cin, name);
+		serie->setName(name);
+
+		cout << "--------serie nome que salvei " << serie->getName() << endl;
+
+		int year;
+		cout << "Digite o ano da serie" << endl;
+		cin >> year;
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		serie->setYear(year);
+
+		int season;
+		cout << "Digite a temporada" << endl;
+		cin >> season;
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		serie->setSeason(season);
+
+		int numberEp;
+		cout << "Digite o numero de episodios" << endl;
+		cin >> numberEp;
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		serie->setNumberEp(numberEp);
+
+		string actors;
+		cout << "Digite um ator" << endl;
+		getline(cin, actors);
+
+		vector<string> allActors;
+		allActors.push_back(actors);
+
+		serie->setActors(allActors);
+
+		string characters;
+		cout << "Digite um personagem" << endl;
+		getline(cin, characters);
+
+		vector<string> allChars;
+		allChars.push_back(characters);
+
+		serie->setCharacters(allChars);
+
+		string streamming;
+		cout << "Digite o streamming" << endl;
+		getline(cin, streamming);
+		serie->setStreamming(streamming);
+
+		int rating;
+		cout << "Digite o rating" << endl;
+		cin >> rating;
+		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+		serie->setRating(rating);
+
+		// serieMemDAO->updateSerie(serie);
+	}
+	else
+	{
+		cout << "Não foi possível encontrar esse registro" << endl;
+	}
+}
 void Controller::actionRecurrent(void)
 {
 	cout << "actionUsers" << endl;

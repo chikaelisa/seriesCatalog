@@ -32,6 +32,7 @@ private:
 
 	void addSerie(void);
 	void consultSerie(void);
+	void editSerie(void);
 
 public:
 	Controller();
