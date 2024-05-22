@@ -102,11 +102,20 @@ int Serie::getRating()
 {
     return rating;
 }
+
 void Serie::setRating(int rating)
 {
     this->rating = rating;
 }
 
-// precisamos ter um metodo para formatar a exibição na tela?
-
-//};
+void Serie::getAllInfo()
+{
+    cout << "------------------" << endl;
+    cout << "Id: " << this->getId() << endl;
+    cout << "Nome: " << this->getName() << endl;
+    cout << "Ano: " << this->getYear() << endl;
+    cout << "Temporada: " << this->getSeason() << endl;
+    cout << "Numero de episodios: " << this->getNumberEp() << endl;
+    cout << "Nota: " << this->getRating() << endl;
+    cout << "------------------" << endl;
+}

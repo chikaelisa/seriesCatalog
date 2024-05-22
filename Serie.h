@@ -52,6 +52,8 @@ public:
 
     int getRating();
     void setRating(int rating);
+
+    void getAllInfo();
 };
 
 #endif /* SERIE_H_ */

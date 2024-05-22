@@ -116,7 +116,7 @@ void Controller::consultSerie(void)
 
 	if (serie != NULL)
 	{
-		cout << "O nome da serie eh: " << serie->getName() << endl;
+		serie->getAllInfo();
 	}
 	else
 	{
