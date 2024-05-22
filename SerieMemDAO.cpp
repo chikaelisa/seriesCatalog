@@ -1,38 +1,41 @@
 #include "SerieMemDAO.h"
 
-int SerieMemDAO::lastSerieId = 0; //mudar isso aqui porque so faz sentido nos usuarios do projeto do angelis. Coloquei pra poder compilar sem erro
+int SerieMemDAO::lastSerieId = 0; // mudar isso aqui porque so faz sentido nos usuarios do projeto do angelis. Coloquei pra poder compilar sem erro
 
-SerieMemDAO::SerieMemDAO(MemoryDBConnection *memoryDBConnection) :
-		memoryDBConnection(memoryDBConnection)
-	{
-	}
+SerieMemDAO::SerieMemDAO(MemoryDBConnection *memoryDBConnection) : memoryDBConnection(memoryDBConnection)
+{
+}
 
 SerieMemDAO::~SerieMemDAO()
-	{
-	// TODO Auto-generated destructor stub
-	}
-
-vector<Serie*> SerieMemDAO::getAllSeries()
-	{
-	return (memoryDBConnection->getSerieList());
-	}
-
-Serie* SerieMemDAO::getSerieId(int serieId)
 {
-	vector<Serie*> &series = memoryDBConnection->getSerieList();
-	vector<Serie*>::iterator seriesIterator = series.begin();
+	// TODO Auto-generated destructor stub
+}
+
+vector<Serie *> SerieMemDAO::getAllSeries()
+{
+	return (memoryDBConnection->getSerieList());
+}
+
+Serie *SerieMemDAO::getSerieId(int serieId)
+{
+	cout << "To no getSerieId" << endl;
+	vector<Serie *> &series = memoryDBConnection->getSerieList();
+	vector<Serie *>::iterator seriesIterator = series.begin();
 	Serie *buffer = NULL;
 	bool found = false;
 
 	while ((!found) && (seriesIterator != series.end()))
 	{
+
 		if ((*seriesIterator)->getId() == serieId)
 		{
+			cout << "To no if" << endl;
 			found = true;
 			buffer = *seriesIterator;
 		}
-		  seriesIterator++;
+		seriesIterator++;
 	}
+	cout << "Terminei o metodo" << endl;
 
 	return (buffer);
 }
@@ -50,19 +53,19 @@ void SerieMemDAO::updateSerie(Serie *serie)
 }
 
 void SerieMemDAO::deleteSerie(int serieId)
-	{
-	vector<Serie*> &series = memoryDBConnection->getSerieList();
-	vector<Serie*>::iterator seriesIterator = series.begin();
+{
+	vector<Serie *> &series = memoryDBConnection->getSerieList();
+	vector<Serie *>::iterator seriesIterator = series.begin();
 	bool found = false;
 
 	while ((!found) && (seriesIterator != series.end()))
-		{
+	{
 		if ((*seriesIterator)->getId() == serieId)
-			{
+		{
 			found = true;
 			delete *seriesIterator;
 			series.erase(seriesIterator);
-			}
-		  seriesIterator++;
 		}
+		seriesIterator++;
 	}
+}

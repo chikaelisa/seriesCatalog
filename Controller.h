@@ -22,13 +22,16 @@ private:
 	MemoryDBConnection *memoryDBConnection;
 	AbstractSerieDAO *serieMemDAO;
 
-	void actionMovement(void);
+	void seriesMenu(void);
 	void actionRecurrent(void);
 	void actionUsers(void);
 	void actionReports(void);
 	void actionHelp(void);
 	void actionAbout(void);
 	void launchActions(string title, vector<string> menuItens, vector<void (Controller::*)()> functions);
+
+	void addSerie(void);
+	void consultSerie(void);
 
 public:
 	Controller();

@@ -25,6 +25,10 @@ Controller::Controller()
 	cout << "Constructor" << endl;
 	memoryDBConnection = new MemoryDBConnection();
 	serieMemDAO = new SerieMemDAO(new MemoryDBConnection());
+
+	serieMemDAO->addSerie(new Serie("Elementary", 2024, 3, 24, {"Fernanda", "Chika", "Ste"}, {"Enzo", "Pietra"}, "Netflix", 8));
+	serieMemDAO->addSerie(new Serie("Sex Education", 2024, 3, 16, {"Rosa", "Andre", "Ste"}, {"Enzo", "Pietra"}, "Prime Vide", 8));
+	serieMemDAO->addSerie(new Serie("Flash", 2024, 3, 20, {"Genilda", "Chika", "Amarildo"}, {"Enzo", "Pietra"}, "Max", 8));
 }
 
 Controller::~Controller()
@@ -32,30 +36,92 @@ Controller::~Controller()
 	// nothing
 }
 
-vector<Serie> series{
-	Serie(4, "Elementary", 2024, 3, 24, {"Fernanda", "Chika", "Ste"}, {"Enzo", "Pietra"}, "Netflix", 8),
-	Serie(5, "Sex Education", 2024, 3, 16, {"Rosa", "Andre", "Ste"}, {"Enzo", "Pietra"}, "Prime Vide", 8),
-	Serie(6, "Flash", 2024, 3, 20, {"Genilda", "Chika", "Amarildo"}, {"Enzo", "Pietra"}, "Max", 8),
-};
-
 void Controller::start()
 {
 	vector<string> menuItens{"Series", "Relatorios", "Ajuda", "Creditos", "Sair"};
-	vector<void (Controller::*)()> functions{&Controller::actionMovement, &Controller::actionUsers, &Controller::actionReports, &Controller::actionHelp, &Controller::actionAbout};
+	vector<void (Controller::*)()> functions{&Controller::seriesMenu, &Controller::actionUsers, &Controller::actionReports, &Controller::actionHelp, &Controller::actionAbout};
 	launchActions("Main Menu", menuItens, functions);
 }
 
-void Controller::actionMovement(void)
+void Controller::seriesMenu(void)
 {
-	for (Serie item : series)
-	{
-		cout << "Nome da serie: " << item.getName() << endl;
-	}
+	vector<string> menuItens{"Cadastrar nova serie", "Consultar serie", "Editar serie", "Excluir serie", "Voltar"};
+	vector<void (Controller::*)()> functions{&Controller::addSerie, &Controller::consultSerie, &Controller::actionReports, &Controller::actionHelp, &Controller::actionAbout};
+	launchActions("Gerenciar Series", menuItens, functions);
 	// 	Serie serie1(4, "Elementary", 2024, 3, 24, {"Fernanda", "Chika", "Ste"}, {"Enzo", "Pietra"}, "Netflix", 8);
 	// int rate = serie1.getRating();
 	// cout << "Nome da serie: " << serie1.getName() << endl;
 	// cout << "Nota da serie: " << to_string(rate) << endl;
 	// cout << "Nome dos personagens: " << serie1.getCharacters() << endl;
+}
+
+void Controller::addSerie(void)
+{
+	vector<Serie *> allSeries = serieMemDAO->getAllSeries();
+	cout << "Nome da serie numero 0: " << allSeries.at(0)->getId() << endl;
+
+	string name;
+	cout << "Digite o nome da serie" << endl;
+	getline(cin, name);
+
+	int year;
+	cout << "Digite o ano da serie" << endl;
+	cin >> year;
+	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+	int season;
+	cout << "Digite a temporada" << endl;
+	cin >> season;
+	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+	int numberEp;
+	cout << "Digite o numero de episodios" << endl;
+	cin >> numberEp;
+	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+	string actors;
+	cout << "Digite um ator" << endl;
+	getline(cin, actors);
+
+	vector<string> allActors;
+	allActors.push_back(actors);
+
+	string characters;
+	cout << "Digite um personagem" << endl;
+	getline(cin, characters);
+
+	vector<string> allChars;
+	allChars.push_back(characters);
+
+	string streamming;
+	cout << "Digite o streamming" << endl;
+	getline(cin, streamming);
+
+	int rating;
+	cout << "Digite o rating" << endl;
+	cin >> rating;
+	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+	serieMemDAO->addSerie(new Serie(name, year, season, numberEp, allActors, allChars, streamming, rating));
+}
+
+void Controller::consultSerie(void)
+{
+	int id;
+	cout << "Digite o ID da serie" << endl;
+	cin >> id;
+	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+	Serie *serie = serieMemDAO->getSerieId(id);
+
+	if (serie != NULL)
+	{
+		cout << "O nome da serie eh: " << serie->getName() << endl;
+	}
+	else
+	{
+		cout << "Não foi possível encontrar esse registro" << endl;
+	}
 }
 
 void Controller::actionRecurrent(void)
