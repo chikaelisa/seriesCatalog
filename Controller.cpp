@@ -10,6 +10,7 @@
 #include "MemoryDBConnection.h"
 #include "SerieMemDAO.h"
 #include "AbstractSerieDAO.h"
+#include "Report.h"
 
 using namespace std;
 
@@ -32,7 +33,7 @@ Controller::~Controller()
 void Controller::start()
 {
 	vector<string> menuItens{"Series", "Relatorios", "Ajuda", "Creditos", "Sair"};
-	vector<void (Controller::*)()> functions{&Controller::seriesMenu, &Controller::actionUsers, &Controller::actionReports, &Controller::actionHelp, &Controller::actionAbout};
+	vector<void (Controller::*)()> functions{&Controller::seriesMenu, &Controller::reports, &Controller::actionReports, &Controller::actionHelp, &Controller::actionAbout};
 	launchActions("Main Menu", menuItens, functions);
 }
 
@@ -40,6 +41,13 @@ void Controller::seriesMenu(void)
 {
 	vector<string> menuItens{"Cadastrar nova serie", "Consultar serie", "Editar serie", "Excluir serie", "Voltar"};
 	vector<void (Controller::*)()> functions{&Controller::addSerie, &Controller::consultSerie, &Controller::editSerie, &Controller::deleteSerie, &Controller::actionAbout};
+	launchActions("Gerenciar Series", menuItens, functions);
+}
+
+void Controller::reports(void)
+{
+	vector<string> menuItens{"Ordenados por titulo", "Ordenados por streaming", "Ordenados por ano", "Ordenados por nota", "Voltar"};
+	vector<void (Controller::*)()> functions{&Controller::orderByTitle, &Controller::consultSerie, &Controller::editSerie, &Controller::deleteSerie, &Controller::actionAbout};
 	launchActions("Gerenciar Series", menuItens, functions);
 }
 
@@ -210,12 +218,14 @@ void Controller::deleteSerie(void)
 	}
 }
 
-void Controller::actionRecurrent(void)
+void Controller::orderByTitle(void)
 {
-	cout << "actionUsers" << endl;
+	vector<Serie*> series = serieMemDAO->getAllSeries();
+	Report *report = new Report();
+	report->orderByTitle(series);
 }
 
-void Controller::actionUsers(void)
+void Controller::actionRecurrent(void)
 {
 	cout << "actionUsers" << endl;
 }

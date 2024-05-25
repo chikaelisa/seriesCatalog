@@ -24,7 +24,7 @@ private:
 
 	void seriesMenu(void);
 	void actionRecurrent(void);
-	void actionUsers(void);
+	void reports(void);
 	void actionReports(void);
 	void actionHelp(void);
 	void actionAbout(void);
@@ -34,6 +34,8 @@ private:
 	void consultSerie(void);
 	void editSerie(void);
 	void deleteSerie(void);
+
+	void orderByTitle(void);
 
 public:
 	Controller();
