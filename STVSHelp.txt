@@ -1,1 +1,32 @@
-Sinto muito, mas não podemos ajudar. 
+Bem-vindo ao sistema de gerenciamento de catálogo de séries!
+
+Este programa foi desenvolvido para um trabalho da disciplina de programação orientada a objetos I. 
+Neste documento você vai encontrar um guia de ajuda para navegar pelas funcionalidades do sistema.
+
+1. Gerenciamento de séries:
+Nesta funcionalidade você poderá ter controle sobre o gerenciamento das suas séries. Isso inclui:
+- Incluir uma nova série: Digite os dados conforme solicitado na tela para registrar uma nova série.
+- Consultar uma série: Informe o id da série desejada para consultar todas as informações dela
+- Editar uma série: Informe o id da série desejada para editá-la. Será necessário digitar todas as informações novas. É importante ressaltar que a edição altera o id cadastrado anteriormente, criando um novo.
+- Excluir uma série: Informe o id da série desejada para excluí-la do sistema permanentemente.
+
+2. Relatórios de séries
+Nesta funcionalidade, ao contrário da consultar, será exibido um relatório de séries, ou seja, todas as séries serão listadas. É necessário escolher um critério de exibição. São eles:
+- Séries ordenadas por título: Será exibido uma lista das séries cadastradas em ordem alfabética por título.
+- Séries ordenadas por streaming: Será exibido uma lista das séries cadastradas em ordem alfabética por streaming.
+- Séries ordenadas por ano: Será exibido uma lista das séries cadastradas em ordem crescente por ano.
+- Séries ordenadas por nota: Será exibido uma lista das séries cadastradas em ordem decrescente por nota.
+
+3. Dicas
+- Use o menu de navegação para acessar as diferentes funcionalidades.
+- Sempre que precisar voltar de um menu acessado, use a opção 0.
+- Use a opção 0 no menu principal para sair do sistema.
+
+4. Ajuda
+Para qualquer problema ou dúvidas, não hesite em mandar uma mensagem para os colaboradores do projeto pelo e-mails:
+- enzoarilla8@gmail.com
+- f257088@dac.unicamp.br
+-  
+
+Obrigado por usar o sistema de gerenciamento de catálogo de séries!
+

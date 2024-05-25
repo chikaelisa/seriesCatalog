@@ -4,13 +4,16 @@
 #include <exception>
 #include <vector>
 
+#include "Utils.h"
 #include "Menu.h"
+#include "TextFromFile.h"
 #include "Controller.h"
 #include "Serie.h"
 #include "MemoryDBConnection.h"
 #include "SerieMemDAO.h"
 #include "AbstractSerieDAO.h"
 #include "Report.h"
+#include "Sysinfo.h"
 
 using namespace std;
 
@@ -20,9 +23,9 @@ Controller::Controller()
 	memoryDBConnection = new MemoryDBConnection();
 	serieMemDAO = new SerieMemDAO(new MemoryDBConnection());
 
-	serieMemDAO->addSerie(new Serie("Elementary", 2024, 3, 24, {"Fernanda", "Chika", "Ste"}, {"Enzo", "Pietra"}, "Netflix", 8));
-	serieMemDAO->addSerie(new Serie("Sex Education", 2024, 3, 16, {"Rosa", "Andre", "Ste"}, {"Enzo", "Pietra"}, "Prime Vide", 8));
-	serieMemDAO->addSerie(new Serie("Flash", 2024, 3, 20, {"Genilda", "Chika", "Amarildo"}, {"Enzo", "Pietra"}, "Max", 8));
+	serieMemDAO->addSerie(new Serie("Elementary", 2021, 3, 24, {"Fernanda", "Chika", "Ste"}, {"Enzo", "Pietra"}, "Netflix", 10));
+	serieMemDAO->addSerie(new Serie("Sex Education", 2024, 3, 16, {"Rosa", "Andre", "Ste"}, {"Enzo", "Pietra"}, "Prime Video", 8));
+	serieMemDAO->addSerie(new Serie("Flash", 2022, 3, 20, {"Genilda", "Chika", "Amarildo"}, {"Enzo", "Pietra"}, "Max", 5));
 }
 
 Controller::~Controller()
@@ -33,21 +36,21 @@ Controller::~Controller()
 void Controller::start()
 {
 	vector<string> menuItens{"Series", "Relatorios", "Ajuda", "Creditos", "Sair"};
-	vector<void (Controller::*)()> functions{&Controller::seriesMenu, &Controller::reports, &Controller::actionReports, &Controller::actionHelp, &Controller::actionAbout};
+	vector<void (Controller::*)()> functions{&Controller::seriesMenu, &Controller::reports, &Controller::help, &Controller::credits};
 	launchActions("Main Menu", menuItens, functions);
 }
 
 void Controller::seriesMenu(void)
 {
 	vector<string> menuItens{"Cadastrar nova serie", "Consultar serie", "Editar serie", "Excluir serie", "Voltar"};
-	vector<void (Controller::*)()> functions{&Controller::addSerie, &Controller::consultSerie, &Controller::editSerie, &Controller::deleteSerie, &Controller::actionAbout};
+	vector<void (Controller::*)()> functions{&Controller::addSerie, &Controller::consultSerie, &Controller::editSerie, &Controller::deleteSerie};
 	launchActions("Gerenciar Series", menuItens, functions);
 }
 
 void Controller::reports(void)
 {
 	vector<string> menuItens{"Ordenados por titulo", "Ordenados por streaming", "Ordenados por ano", "Ordenados por nota", "Voltar"};
-	vector<void (Controller::*)()> functions{&Controller::orderByTitle, &Controller::consultSerie, &Controller::editSerie, &Controller::deleteSerie, &Controller::actionAbout};
+	vector<void (Controller::*)()> functions{&Controller::orderByTitle, &Controller::orderByStreaming, &Controller::orderByYear, &Controller::orderByRating};
 	launchActions("Gerenciar Series", menuItens, functions);
 }
 
@@ -222,27 +225,51 @@ void Controller::orderByTitle(void)
 {
 	vector<Serie*> series = serieMemDAO->getAllSeries();
 	Report *report = new Report();
-	report->orderByTitle(series);
+	//report->orderByTitle(series);
+	report->orderBy(series, 1);
 }
 
-void Controller::actionRecurrent(void)
+void Controller::orderByStreaming(void)
 {
-	cout << "actionUsers" << endl;
+	vector<Serie*> series = serieMemDAO->getAllSeries();
+	Report *report = new Report();
+	//report->orderByTitle(series);
+	report->orderBy(series, 2);
 }
 
-void Controller::actionReports(void)
+void Controller::orderByYear(void)
 {
-	cout << "actionReports" << endl;
+	vector<Serie*> series = serieMemDAO->getAllSeries();
+	Report *report = new Report();
+	//report->orderByTitle(series);
+	report->orderBy(series, 3);
 }
 
-void Controller::actionHelp(void)
+void Controller::orderByRating(void)
 {
-	cout << "actionHelp" << endl;
+	vector<Serie*> series = serieMemDAO->getAllSeries();
+	Report *report = new Report();
+	//report->orderByTitle(series);
+	report->orderBy(series, 4);
 }
 
-void Controller::actionAbout(void)
+void Controller::help(void)
 {
-	cout << "actionAbout" << endl;
+	Utils::printMessage(SysInfo::getFullVersion() + " | Help");
+	unique_ptr<TextFromFile> textFromFile(new TextFromFile(SysInfo::getHelpFile()));
+	Utils::printFramedMessage(textFromFile->getFileContent(), "*", 120);
+}
+
+void Controller::credits(void)
+{
+	string text = "";
+	text += SysInfo::getFullVersion() + "\n";
+	text += SysInfo::getAuthor() + "\n";
+	text += SysInfo::getInstitution() + "\n";
+	text += SysInfo::getDepartment() + "\n";
+	text += "Copyright " + SysInfo::getAuthor() + " " + SysInfo::getDate() + "\n";
+	Utils::printMessage(SysInfo::getVersion() + " | About");
+	Utils::printFramedMessage(text, "*", 120);
 }
 
 void Controller::launchActions(string title, vector<string> menuItens, vector<void (Controller::*)()> functions)

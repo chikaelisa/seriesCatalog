@@ -16,11 +16,11 @@ int main(int argc, char *argv[])
 		}
 	catch (const exception &myException)
 		{
-		cout << "Unexpected problem. Program aborted. " + string(myException.what()) << endl;
+		cout << "Um erro inesperado ocorreu. Programa finalizado " + string(myException.what()) << endl;
 		exit(1);
 		}
 
-	cout << "See you soon" << endl;
+	cout << "Ate breve!" << endl;
 	return (0);
 
 

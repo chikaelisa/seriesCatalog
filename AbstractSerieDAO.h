@@ -13,7 +13,7 @@ public:
 	AbstractSerieDAO();
 	virtual ~AbstractSerieDAO();
 
-	virtual vector<Serie *> getAllSeries() = 0;
+	virtual vector<Serie*> getAllSeries() = 0;
 	virtual Serie *getSerieId(int serieId) = 0;
 	virtual void addSerie(Serie *serie) = 0;
 	virtual void updateSerie(Serie *serie) = 0;

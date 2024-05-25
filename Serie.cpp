@@ -31,7 +31,7 @@ void Serie::setId(int id)
     }
     else
     {
-        throw new runtime_error("Invalid operation. Changing userId value that is not null.");
+        throw new runtime_error("Operacao invalida. Use um id valido.");
     }
 }
 

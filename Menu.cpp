@@ -8,6 +8,7 @@
  */
 
 #include <math.h>
+#include <cstdlib>
 
 #include "Menu.h"
 
@@ -65,6 +66,8 @@ const int Menu::getChoice()
 	} while (isNotAValidChoice(choice));
 
 	cin.ignore();
+
+	system("cls");
 
 	return (choice);
 }

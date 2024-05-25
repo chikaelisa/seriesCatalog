@@ -23,11 +23,9 @@ private:
 	AbstractSerieDAO *serieMemDAO;
 
 	void seriesMenu(void);
-	void actionRecurrent(void);
 	void reports(void);
-	void actionReports(void);
-	void actionHelp(void);
-	void actionAbout(void);
+	void help(void);
+	void credits(void);
 	void launchActions(string title, vector<string> menuItens, vector<void (Controller::*)()> functions);
 
 	void addSerie(void);
@@ -36,6 +34,9 @@ private:
 	void deleteSerie(void);
 
 	void orderByTitle(void);
+	void orderByStreaming(void);
+	void orderByYear(void);
+	void orderByRating(void);
 
 public:
 	Controller();
