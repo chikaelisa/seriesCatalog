@@ -39,7 +39,7 @@ void Controller::start()
 void Controller::seriesMenu(void)
 {
 	vector<string> menuItens{"Cadastrar nova serie", "Consultar serie", "Editar serie", "Excluir serie", "Voltar"};
-	vector<void (Controller::*)()> functions{&Controller::addSerie, &Controller::consultSerie, &Controller::editSerie, &Controller::actionHelp, &Controller::actionAbout};
+	vector<void (Controller::*)()> functions{&Controller::addSerie, &Controller::consultSerie, &Controller::editSerie, &Controller::deleteSerie, &Controller::actionAbout};
 	launchActions("Gerenciar Series", menuItens, functions);
 }
 
@@ -114,7 +114,7 @@ void Controller::consultSerie(void)
 	}
 	else
 	{
-		cout << "Não foi possível encontrar esse registro" << endl;
+		cout << "Nao foi possivel encontrar esse registro" << endl;
 	}
 }
 
@@ -135,8 +135,6 @@ void Controller::editSerie(void)
 		cout << "Digite o nome da serie" << endl;
 		getline(cin, name);
 		serie->setName(name);
-
-		cout << "--------serie nome que salvei " << serie->getName() << endl;
 
 		int year;
 		cout << "Digite o ano da serie" << endl;
@@ -189,9 +187,29 @@ void Controller::editSerie(void)
 	}
 	else
 	{
-		cout << "Não foi possível encontrar esse registro" << endl;
+		cout << "Nao foi possivel encontrar esse registro" << endl;
 	}
 }
+
+void Controller::deleteSerie(void)
+{
+	int id;
+	cout << "Digite o ID da serie" << endl;
+	cin >> id;
+	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	Serie *serie = serieMemDAO->getSerieId(id);
+
+	if (serie != NULL)
+	{
+		serieMemDAO->deleteSerie(id);
+		cout << "Serie excluida com sucesso" << endl;
+	}
+	else
+	{
+		cout << "Nao foi possivel encontrar esse registro" << endl;
+	}
+}
+
 void Controller::actionRecurrent(void)
 {
 	cout << "actionUsers" << endl;

@@ -33,6 +33,7 @@ private:
 	void addSerie(void);
 	void consultSerie(void);
 	void editSerie(void);
+	void deleteSerie(void);
 
 public:
 	Controller();

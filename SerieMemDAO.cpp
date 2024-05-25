@@ -39,8 +39,6 @@ Serie *SerieMemDAO::getSerieId(int serieId)
 
 void SerieMemDAO::addSerie(Serie *serie)
 {
-	cout << "Estou no addSerie-------" << endl;
-	serie->getAllInfo();
 	serie->setId(++lastSerieId);
 	(memoryDBConnection->getSerieList()).push_back(serie);
 }

@@ -115,6 +115,7 @@ void Serie::getAllInfo()
     cout << "Nome: " << this->getName() << endl;
     cout << "Ano: " << this->getYear() << endl;
     cout << "Temporada: " << this->getSeason() << endl;
+    cout << "Streamming: " << this->getStreamming() << endl;
     cout << "Numero de episodios: " << this->getNumberEp() << endl;
     cout << "Nota: " << this->getRating() << endl;
     cout << "------------------" << endl;
