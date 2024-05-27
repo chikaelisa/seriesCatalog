@@ -20,6 +20,7 @@ private:
     vector<string> characters;
     string streamming;
     int rating;
+    void printVectorString(const vector<string> &vec, string sep);
 
 public:
     Serie(int id, string name, int year, int season, int numberEp, vector<string> actors, vector<string> characters, string streamming, int rating);

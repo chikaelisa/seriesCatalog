@@ -19,7 +19,7 @@ using namespace std;
 
 Controller::Controller()
 {
-	cout << "Constructor" << endl;
+	cout << "Boas vindas ao Catalogo de Series" << endl;
 	memoryDBConnection = new MemoryDBConnection();
 	serieMemDAO = new SerieMemDAO(new MemoryDBConnection());
 
@@ -57,7 +57,6 @@ void Controller::reports(void)
 void Controller::addSerie(void)
 {
 	vector<Serie *> allSeries = serieMemDAO->getAllSeries();
-	cout << "Nome da serie numero 0: " << allSeries.at(0)->getId() << endl;
 
 	string name;
 	cout << "Digite o nome da serie" << endl;
@@ -78,12 +77,18 @@ void Controller::addSerie(void)
 	cin >> numberEp;
 	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
+	cout << "Para terminar de incluir atores, digite 0" << endl;
 	string actors;
-	cout << "Digite um ator" << endl;
-	getline(cin, actors);
-
 	vector<string> allActors;
-	allActors.push_back(actors);
+
+	do
+	{
+		cout << "Digite um ator" << endl;
+		getline(cin, actors);
+		if (actors != "0")
+			allActors.push_back(actors);
+
+	} while (actors != "0");
 
 	string characters;
 	cout << "Digite um personagem" << endl;
@@ -189,7 +194,7 @@ void Controller::editSerie(void)
 		serie->setStreamming(streamming);
 
 		int rating;
-		cout << "Digite o rating" << endl;
+		cout << "Digite a nota" << endl;
 		cin >> rating;
 		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		serie->setRating(rating);

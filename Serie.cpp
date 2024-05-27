@@ -18,6 +18,18 @@ Serie::~Serie()
 {
 }
 
+void Serie::printVectorString(const vector<string> &vec, string separator = ", ")
+{
+    for (auto elem : vec)
+    {
+        cout << elem;
+        if (elem != vec.back())
+            cout << separator;
+    }
+
+    cout << endl;
+}
+
 int Serie::getId() const
 {
     return id;
@@ -118,5 +130,9 @@ void Serie::getAllInfo()
     cout << "Streamming: " << this->getStreamming() << endl;
     cout << "Numero de episodios: " << this->getNumberEp() << endl;
     cout << "Nota: " << this->getRating() << endl;
+
+    cout << "Atores: " << endl;
+    printVectorString(actors);
+
     cout << "------------------" << endl;
 }
