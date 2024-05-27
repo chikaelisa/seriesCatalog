@@ -6,14 +6,14 @@
  */
 
 #include <vector>
-
+#include <iostream>
 #include "MemoryDBConnection.h"
 
 using namespace std;
 
 MemoryDBConnection::MemoryDBConnection()
 {
-	  seriesDB = vector<Serie*>();
+	seriesDB = vector<Serie *>();
 }
 
 MemoryDBConnection::~MemoryDBConnection()
@@ -21,7 +21,7 @@ MemoryDBConnection::~MemoryDBConnection()
 	close();
 }
 
-vector<Serie*>& MemoryDBConnection::getSerieList()
+vector<Serie *> &MemoryDBConnection::getSerieList()
 {
 	return seriesDB;
 }
@@ -34,5 +34,5 @@ void MemoryDBConnection::close()
 		delete buffer;
 		buffer = NULL;
 	}
-	  seriesDB.clear();
+	seriesDB.clear();
 }

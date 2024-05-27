@@ -3,7 +3,7 @@
  *
  *  Created on: Mar 12, 2024
  *      Author: andre
- * 
+ *
  *  Adapted on May 04, 2024
  */
 
@@ -67,7 +67,7 @@ const int Menu::getChoice()
 
 	cin.ignore();
 
-	system("cls");
+	system("clear");
 
 	return (choice);
 }

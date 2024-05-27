@@ -13,7 +13,7 @@
 #include "SerieMemDAO.h"
 #include "AbstractSerieDAO.h"
 #include "Report.h"
-#include "Sysinfo.h"
+#include "SysInfo.h"
 
 using namespace std;
 
@@ -223,33 +223,33 @@ void Controller::deleteSerie(void)
 
 void Controller::orderByTitle(void)
 {
-	vector<Serie*> series = serieMemDAO->getAllSeries();
+	vector<Serie *> series = serieMemDAO->getAllSeries();
 	Report *report = new Report();
-	//report->orderByTitle(series);
+	// report->orderByTitle(series);
 	report->orderBy(series, 1);
 }
 
 void Controller::orderByStreaming(void)
 {
-	vector<Serie*> series = serieMemDAO->getAllSeries();
+	vector<Serie *> series = serieMemDAO->getAllSeries();
 	Report *report = new Report();
-	//report->orderByTitle(series);
+	// report->orderByTitle(series);
 	report->orderBy(series, 2);
 }
 
 void Controller::orderByYear(void)
 {
-	vector<Serie*> series = serieMemDAO->getAllSeries();
+	vector<Serie *> series = serieMemDAO->getAllSeries();
 	Report *report = new Report();
-	//report->orderByTitle(series);
+	// report->orderByTitle(series);
 	report->orderBy(series, 3);
 }
 
 void Controller::orderByRating(void)
 {
-	vector<Serie*> series = serieMemDAO->getAllSeries();
+	vector<Serie *> series = serieMemDAO->getAllSeries();
 	Report *report = new Report();
-	//report->orderByTitle(series);
+	// report->orderByTitle(series);
 	report->orderBy(series, 4);
 }
 
