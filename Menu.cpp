@@ -14,6 +14,7 @@
 
 Menu::Menu(vector<string> &itens, string title, string message) : itens(itens), title(title), message(message)
 {
+	system("cls");
 	this->setWidth();
 	this->setSymbol();
 	this->setZeroForLastOpt();
@@ -60,14 +61,14 @@ const int Menu::getChoice()
 
 		if (isNotAValidChoice(choice))
 		{
-			cout << "Escolha uma opção válida" << endl;
+			cout << "Escolha uma opcao valida" << endl;
 		}
 
 	} while (isNotAValidChoice(choice));
 
 	cin.ignore();
 
-	system("clear");
+	system("cls");
 
 	return (choice);
 }

@@ -3,6 +3,7 @@
 #include <memory>
 #include <exception>
 #include <vector>
+#include <windows.h>
 
 #include "Utils.h"
 #include "Menu.h"
@@ -23,9 +24,9 @@ Controller::Controller()
 	memoryDBConnection = new MemoryDBConnection();
 	serieMemDAO = new SerieMemDAO(new MemoryDBConnection());
 
-	serieMemDAO->addSerie(new Serie("Elementary", 2021, 3, 24, {"Fernanda", "Chika", "Ste"}, {"Enzo", "Pietra"}, "Netflix", 10));
-	serieMemDAO->addSerie(new Serie("Sex Education", 2024, 3, 16, {"Rosa", "Andre", "Ste"}, {"Enzo", "Pietra"}, "Prime Video", 8));
-	serieMemDAO->addSerie(new Serie("Flash", 2022, 3, 20, {"Genilda", "Chika", "Amarildo"}, {"Enzo", "Pietra"}, "Max", 5));
+	serieMemDAO->addSerie(new Serie("Elementary", 2021, 3, 24, "Fernanda, Chika, Ste", "Enzo, Pietra", "Netflix", 10));
+	serieMemDAO->addSerie(new Serie("Sex Education", 2024, 3, 16, "Rosa, Andre, Ste", "Enzo, Pietra", "Prime Video", 8));
+	serieMemDAO->addSerie(new Serie("Flash", 2022, 3, 20, "Genilda, Chika, Amarildo", "Enzo, Pietra", "Max", 5));
 }
 
 Controller::~Controller()
@@ -37,7 +38,7 @@ void Controller::start()
 {
 	vector<string> menuItens{"Series", "Relatorios", "Ajuda", "Creditos", "Sair"};
 	vector<void (Controller::*)()> functions{&Controller::seriesMenu, &Controller::reports, &Controller::help, &Controller::credits};
-	launchActions("Main Menu", menuItens, functions);
+	launchActions("Menu Principal", menuItens, functions);
 }
 
 void Controller::seriesMenu(void)
@@ -56,57 +57,101 @@ void Controller::reports(void)
 
 void Controller::addSerie(void)
 {
+	Utils::printFramedMessage("Cadastro de Serie", "*", 21);
+
 	vector<Serie *> allSeries = serieMemDAO->getAllSeries();
 
 	string name;
-	cout << "Digite o nome da serie" << endl;
+	cout << "Digite o nome da serie: ";
 	getline(cin, name);
 
 	int year;
-	cout << "Digite o ano da serie" << endl;
+	cout << "Digite o ano da serie: ";
 	cin >> year;
 	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
 	int season;
-	cout << "Digite a temporada" << endl;
+	cout << "Digite a temporada: ";
 	cin >> season;
 	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
 	int numberEp;
-	cout << "Digite o numero de episodios" << endl;
+	cout << "Digite o numero de episodios: ";
 	cin >> numberEp;
 	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-	cout << "Para terminar de incluir atores, digite 0" << endl;
+	cout << endl;
+
+	cout << "Para terminar de incluir atores, digite 0." << endl;
 	string actors;
-	vector<string> allActors;
+	string actorsConcact;
 
 	do
 	{
-		cout << "Digite um ator" << endl;
+
+		cout << "Digite um ator: ";
 		getline(cin, actors);
-		if (actors != "0")
-			allActors.push_back(actors);
+		actorsConcact.append(actors).append(", ");
+		if (actors == "0")
+			actorsConcact.pop_back();
 
 	} while (actors != "0");
 
-	string characters;
-	cout << "Digite um personagem" << endl;
-	getline(cin, characters);
+	cout << endl;
 
-	vector<string> allChars;
-	allChars.push_back(characters);
+	cout << "Para terminar de incluir personagens, digite 0." << endl;
+	string characters;
+	string charactersConcat = "";
+
+	do 
+	{
+
+		cout << "Digite um personagem: ";
+		getline(cin, characters);
+		charactersConcat.append(characters).append(", ");
+		if (characters == "0")
+			charactersConcat.pop_back();
+
+	} while (characters != "0");
+
+	cout << endl;
 
 	string streamming;
-	cout << "Digite o streamming" << endl;
+	cout << "Digite o streamming: ";
 	getline(cin, streamming);
 
 	int rating;
-	cout << "Digite o rating" << endl;
+	cout << "Digite o rating: ";
 	cin >> rating;
 	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-	serieMemDAO->addSerie(new Serie(name, year, season, numberEp, allActors, allChars, streamming, rating));
+	system("cls");
+
+	Serie *newSerie = new Serie(name, year, season, numberEp, actorsConcact, charactersConcat, streamming, rating);
+	serieMemDAO->addSerie(newSerie);
+	newSerie->getAllInfo();
+
+	char confirmation;
+	cout << endl;
+	cout << "Deseja confirmar a inclusão da serie? (S/N)" << endl;
+	cout << "R: ";
+	cin >> confirmation;
+	cout << endl;
+
+	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+	if (confirmation == 'N')
+	{
+		serieMemDAO->deleteSerie(newSerie->getId());
+		cout << "Cadastro de serie cancelado. Retornando ao menu de series...";
+	}
+	else
+		cout << "Serie cadastrada com sucesso. Retornando ao menu de series...";
+
+	Sleep(4000);
+
+	system("cls");
+
 }
 
 void Controller::consultSerie(void)
@@ -148,7 +193,7 @@ void Controller::editSerie(void)
 	if (serie != NULL)
 	{
 		string name;
-		cout << "Digite o nome da serie" << endl;
+		cout << "Digite o nome da serie: ";
 		getline(cin, name);
 		serie->setName(name);
 
@@ -171,27 +216,41 @@ void Controller::editSerie(void)
 		serie->setNumberEp(numberEp);
 
 		string actors;
-		cout << "Digite um ator" << endl;
-		getline(cin, actors);
+		string actorsConcact;
 
-		vector<string> allActors;
-		allActors.push_back(actors);
+		do
+		{
 
-		serie->setActors(allActors);
+			cout << "Digite um ator: ";
+			getline(cin, actors);
+			actorsConcact.append(actors).append(", ");
+			if (actors == "0")
+				actorsConcact.erase(actorsConcact.size() - 1);
+
+		} while (actors != "0");
+
+		serie->setActors(actorsConcact);
 
 		string characters;
-		cout << "Digite um personagem" << endl;
-		getline(cin, characters);
+		string charactersConcat;
 
-		vector<string> allChars;
-		allChars.push_back(characters);
+		do 
+		{
 
-		serie->setCharacters(allChars);
+			cout << "Digite um personagem: ";
+			getline(cin, characters);
+			charactersConcat.append(characters).append(", ");
+			if (characters == "0")
+				charactersConcat.erase(charactersConcat.size() - 1);
 
-		string streamming;
-		cout << "Digite o streamming" << endl;
-		getline(cin, streamming);
-		serie->setStreamming(streamming);
+		} while (characters != "0");
+
+		serie->setCharacters(charactersConcat);
+
+		string streaming;
+		cout << "Digite o streaming" << endl;
+		getline(cin, streaming);
+		serie->setStreamming(streaming);
 
 		int rating;
 		cout << "Digite a nota" << endl;
@@ -281,7 +340,7 @@ void Controller::launchActions(string title, vector<string> menuItens, vector<vo
 {
 	try
 	{
-		Menu menu(menuItens, title, "Your option: ");
+		Menu menu(menuItens, title, "Sua opcao: ");
 		menu.setSymbol("*");
 
 		while (int choice = menu.getChoice())
@@ -291,6 +350,6 @@ void Controller::launchActions(string title, vector<string> menuItens, vector<vo
 	}
 	catch (const exception &myException)
 	{
-		cout << " ERRRRRRRRou!" << endl;
+		cout << "Um problema ocorreu." << endl;
 	}
 }

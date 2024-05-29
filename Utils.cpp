@@ -6,6 +6,7 @@
  */
 
 #include <iostream>
+#include <vector>
 #include "Utils.h"
 #include "SysInfo.h"
 
@@ -30,3 +31,14 @@ string Utils::replicate(string text, int times)
 	}
 	return (buffer);
 }
+
+/*void Utils::printVectorString(const vector<string> &vec, string separator)
+{
+    for (auto elem : vec)
+    {
+        cout << elem;
+        if (elem != vec.back())
+            cout << separator;
+    }
+    cout << endl;
+}*/
