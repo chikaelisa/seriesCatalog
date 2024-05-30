@@ -11,10 +11,10 @@
 #include <cstdlib>
 
 #include "Menu.h"
+#include "Utils.h"
 
 Menu::Menu(vector<string> &itens, string title, string message) : itens(itens), title(title), message(message)
 {
-	system("cls");
 	this->setWidth();
 	this->setSymbol();
 	this->setZeroForLastOpt();
@@ -68,7 +68,7 @@ const int Menu::getChoice()
 
 	cin.ignore();
 
-	system("cls");
+	Utils::clearConsole();
 
 	return (choice);
 }

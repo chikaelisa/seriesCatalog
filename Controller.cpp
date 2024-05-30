@@ -3,7 +3,9 @@
 #include <memory>
 #include <exception>
 #include <vector>
-#include <windows.h>
+// #include <windows.h>
+// #include <unistd.h>
+#include <ctype.h>
 
 #include "Utils.h"
 #include "Menu.h"
@@ -91,9 +93,12 @@ void Controller::addSerie(void)
 
 		cout << "Digite um ator: ";
 		getline(cin, actors);
-		actorsConcact.append(actors).append(", ");
+		if (actors != "0")
+			actorsConcact.append(actors).append(", ");
 		if (actors == "0")
-			actorsConcact.pop_back();
+		{
+			actorsConcact.erase(actorsConcact.length() - 2, 2);
+		}
 
 	} while (actors != "0");
 
@@ -103,14 +108,17 @@ void Controller::addSerie(void)
 	string characters;
 	string charactersConcat = "";
 
-	do 
+	do
 	{
 
 		cout << "Digite um personagem: ";
 		getline(cin, characters);
-		charactersConcat.append(characters).append(", ");
+		if (characters != "0")
+			charactersConcat.append(characters).append(", ");
 		if (characters == "0")
-			charactersConcat.pop_back();
+		{
+			charactersConcat.erase(charactersConcat.length() - 2, 2);
+		}
 
 	} while (characters != "0");
 
@@ -125,10 +133,9 @@ void Controller::addSerie(void)
 	cin >> rating;
 	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-	system("cls");
+	Utils::clearConsole();
 
 	Serie *newSerie = new Serie(name, year, season, numberEp, actorsConcact, charactersConcat, streamming, rating);
-	serieMemDAO->addSerie(newSerie);
 	newSerie->getAllInfo();
 
 	char confirmation;
@@ -138,39 +145,45 @@ void Controller::addSerie(void)
 	cin >> confirmation;
 	cout << endl;
 
-	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	Utils::clearConsole();
 
-	if (confirmation == 'N')
+	if (toupper(confirmation) == 'N')
 	{
 		serieMemDAO->deleteSerie(newSerie->getId());
-		cout << "Cadastro de serie cancelado. Retornando ao menu de series...";
+		cout << "Cadastro de serie cancelado. Retornando ao menu de series..." << endl;
+		cout << endl;
 	}
 	else
-		cout << "Serie cadastrada com sucesso. Retornando ao menu de series...";
-
-	Sleep(4000);
-
-	system("cls");
-
+	{
+		serieMemDAO->addSerie(newSerie);
+		cout << "Serie cadastrada com sucesso. Retornando ao menu de series..." << endl;
+		cout << endl;
+	}
 }
 
 void Controller::consultSerie(void)
 {
 	vector<Serie *> allseries = serieMemDAO->getAllSeries();
-	// for (int i = 0; i < allseries.size(); i++)
-	// {
-	// 	allseries[i]->getAllInfo();
-	// }
+
+	Utils::printFramedMessage("Series Cadastradas", "*", 21);
+
+	for (int i = 0; i < allseries.size(); i++)
+	{
+		cout << "ID: " << allseries[i]->getId() << " Nome: " << allseries[i]->getName() << endl;
+	}
 
 	int id;
-	cout << "Digite o ID da serie" << endl;
+	cout << "Digite o ID da serie que deseja consultar: ";
 	cin >> id;
 	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+	Utils::clearConsole();
 
 	Serie *serie = serieMemDAO->getSerieId(id);
 
 	if (serie != NULL)
 	{
+		Utils::printFramedMessage(serie->getName(), "*", 21);
 		serie->getAllInfo();
 	}
 	else
@@ -234,7 +247,7 @@ void Controller::editSerie(void)
 		string characters;
 		string charactersConcat;
 
-		do 
+		do
 		{
 
 			cout << "Digite um personagem: ";

@@ -1,10 +1,3 @@
-/*
- * Utils.cpp
- *
- *  Created on: Mar 13, 2024
- *      Author: andre
- */
-
 #include <iostream>
 #include <vector>
 #include "Utils.h"
@@ -17,9 +10,9 @@ void Utils::printMessage(string text)
 
 void Utils::printFramedMessage(string text, string symbol, int length)
 {
-	cout << replicate(symbol,length) << endl;
+	cout << replicate(symbol, length) << endl;
 	cout << text << endl;
-	cout << replicate(symbol,length) << endl;
+	cout << replicate(symbol, length) << endl;
 }
 
 string Utils::replicate(string text, int times)
@@ -32,13 +25,11 @@ string Utils::replicate(string text, int times)
 	return (buffer);
 }
 
-/*void Utils::printVectorString(const vector<string> &vec, string separator)
+void Utils::clearConsole()
 {
-    for (auto elem : vec)
-    {
-        cout << elem;
-        if (elem != vec.back())
-            cout << separator;
-    }
-    cout << endl;
-}*/
+#ifdef _WIN32
+	system("cls"); // Comando para limpar console no Windows
+#else
+	system("clear"); // Comando para limpar console no macOS e Linux
+#endif
+}

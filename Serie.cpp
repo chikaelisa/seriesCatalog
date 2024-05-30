@@ -19,20 +19,6 @@ Serie::~Serie()
 {
 }
 
-/*
-void Serie::printVectorString(const vector<string> &vec, string separator = ", ")
-{
-    for (auto elem : vec)
-    {
-        cout << elem;
-        if (elem != vec.back())
-            cout << separator;
-    }
-
-    cout << endl;
-}
-*/
-
 int Serie::getId() const
 {
     return id;
@@ -126,7 +112,6 @@ void Serie::setRating(int rating)
 
 void Serie::getAllInfo()
 {
-    cout << "------------------" << endl;
     cout << "Id: " << this->getId() << endl;
     cout << "Nome: " << this->getName() << endl;
     cout << "Ano: " << this->getYear() << endl;
@@ -136,5 +121,5 @@ void Serie::getAllInfo()
     cout << "Personagens: " << this->getCharacters() << endl;
     cout << "Streaming: " << this->getStreamming() << endl;
     cout << "Nota: " << this->getRating() << endl;
-    cout << "------------------" << endl;
+    cout << endl;
 }
