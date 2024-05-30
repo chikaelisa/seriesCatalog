@@ -1,10 +1,3 @@
-/*
- * Controller.h
- *
- *  Created on: Mar 11, 2024
- *      Author: andre
- */
-
 #ifndef CONTROLLER_H_
 #define CONTROLLER_H_
 
@@ -28,16 +21,16 @@ private:
 	void help(void);
 	void credits(void);
 	void launchActions(string title, vector<string> menuItens, vector<void (Controller::*)()> functions);
+	void launchReport(string title, vector<string> menuItens);
 
 	void addSerie(void);
 	void consultSerie(void);
 	void editSerie(void);
 	void deleteSerie(void);
 
-	void orderByTitle(void);
-	void orderByStreaming(void);
-	void orderByYear(void);
-	void orderByRating(void);
+	void reportOrderBy(int option);
+
+	void showRegisteredSeries(void);
 
 public:
 	Controller();

@@ -18,13 +18,13 @@ private:
     int numberEp;
     string actors;
     string characters;
-    string streamming;
+    string streaming;
     int rating;
-    //void printVectorString(const vector<string> &vec, string sep);
+    // void printVectorString(const vector<string> &vec, string sep);
 
 public:
-    Serie(int id, string name, int year, int season, int numberEp, string actors, string characters, string streamming, int rating);
-    Serie(string name, int year, int season, int numberEp, string actors, string characters, string streamming, int rating);
+    Serie(int id, string name, int year, int season, int numberEp, string actors, string characters, string streaming, int rating);
+    Serie(string name, int year, int season, int numberEp, string actors, string characters, string streaming, int rating);
     virtual ~Serie();
 
     int getId() const;
@@ -48,8 +48,8 @@ public:
     string getCharacters();
     void setCharacters(string characters);
 
-    string getStreamming();
-    void setStreamming(string streamming);
+    string getStreaming();
+    void setStreaming(string streaming);
 
     int getRating();
     void setRating(int rating);

@@ -8,10 +8,10 @@
 
 using namespace std;
 
-Serie::Serie(int id, string name, int year, int season, int numberEp, string actors, string characters, string streamming, int rating) : id(id), name(name), year(year), season(season), numberEp(numberEp), actors(actors), characters(characters), streamming(streamming), rating(rating)
+Serie::Serie(int id, string name, int year, int season, int numberEp, string actors, string characters, string streaming, int rating) : id(id), name(name), year(year), season(season), numberEp(numberEp), actors(actors), characters(characters), streaming(streaming), rating(rating)
 {
 }
-Serie::Serie(string name, int year, int season, int numberEp, string actors, string characters, string streamming, int rating) : name(name), year(year), season(season), numberEp(numberEp), actors(actors), characters(characters), streamming(streamming), rating(rating)
+Serie::Serie(string name, int year, int season, int numberEp, string actors, string characters, string streaming, int rating) : name(name), year(year), season(season), numberEp(numberEp), actors(actors), characters(characters), streaming(streaming), rating(rating)
 {
     this->id = 0;
 }
@@ -91,13 +91,13 @@ void Serie::setCharacters(string characters)
     this->characters = characters;
 }
 
-string Serie::getStreamming()
+string Serie::getStreaming()
 {
-    return streamming;
+    return streaming;
 }
-void Serie::setStreamming(string streamming)
+void Serie::setStreaming(string streaming)
 {
-    this->streamming = streamming;
+    this->streaming = streaming;
 }
 
 int Serie::getRating()
@@ -119,7 +119,7 @@ void Serie::getAllInfo()
     cout << "Numero de episodios: " << this->getNumberEp() << endl;
     cout << "Atores: " << this->getActors() << endl;
     cout << "Personagens: " << this->getCharacters() << endl;
-    cout << "Streaming: " << this->getStreamming() << endl;
+    cout << "Streaming: " << this->getStreaming() << endl;
     cout << "Nota: " << this->getRating() << endl;
     cout << endl;
 }

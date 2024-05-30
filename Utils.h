@@ -15,6 +15,7 @@ public:
 	static void printFramedMessage(string text, string symbol, int length);
 	static string replicate(string text, int times);
 	static void clearConsole();
+	static void concatString(string *info, string message);
 };
 
 #endif /* UTILS_H_ */

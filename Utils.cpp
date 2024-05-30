@@ -1,5 +1,6 @@
 #include <iostream>
 #include <vector>
+#include <string>
 #include "Utils.h"
 #include "SysInfo.h"
 
@@ -32,4 +33,26 @@ void Utils::clearConsole()
 #else
 	system("clear"); // Comando para limpar console no macOS e Linux
 #endif
+}
+
+void Utils::concatString(string *info, string message)
+{
+	string newInfo;
+	do
+	{
+
+		cout << message;
+		getline(cin, newInfo);
+		if (newInfo != "0")
+		{
+			info->append(newInfo);
+			info->append(", ");
+		}
+
+		if (newInfo == "0")
+		{
+			info->erase(info->length() - 2, 2);
+		}
+
+	} while (newInfo != "0");
 }

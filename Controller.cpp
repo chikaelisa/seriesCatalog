@@ -53,13 +53,12 @@ void Controller::seriesMenu(void)
 void Controller::reports(void)
 {
 	vector<string> menuItens{"Ordenados por titulo", "Ordenados por streaming", "Ordenados por ano", "Ordenados por nota", "Voltar"};
-	vector<void (Controller::*)()> functions{&Controller::orderByTitle, &Controller::orderByStreaming, &Controller::orderByYear, &Controller::orderByRating};
-	launchActions("Gerenciar Series", menuItens, functions);
+	launchReport("Gerenciar Series", menuItens);
 }
 
 void Controller::addSerie(void)
 {
-	Utils::printFramedMessage("Cadastro de Serie", "*", 21);
+	Utils::printFramedMessage("Cadastro de Serie", "-", 21);
 
 	vector<Serie *> allSeries = serieMemDAO->getAllSeries();
 
@@ -83,50 +82,20 @@ void Controller::addSerie(void)
 	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
 	cout << endl;
-
 	cout << "Para terminar de incluir atores, digite 0." << endl;
-	string actors;
 	string actorsConcact;
-
-	do
-	{
-
-		cout << "Digite um ator: ";
-		getline(cin, actors);
-		if (actors != "0")
-			actorsConcact.append(actors).append(", ");
-		if (actors == "0")
-		{
-			actorsConcact.erase(actorsConcact.length() - 2, 2);
-		}
-
-	} while (actors != "0");
+	Utils::concatString(&actorsConcact, "Digite um ator: ");
 
 	cout << endl;
-
 	cout << "Para terminar de incluir personagens, digite 0." << endl;
-	string characters;
 	string charactersConcat = "";
-
-	do
-	{
-
-		cout << "Digite um personagem: ";
-		getline(cin, characters);
-		if (characters != "0")
-			charactersConcat.append(characters).append(", ");
-		if (characters == "0")
-		{
-			charactersConcat.erase(charactersConcat.length() - 2, 2);
-		}
-
-	} while (characters != "0");
+	Utils::concatString(&charactersConcat, "Digite um personagem: ");
 
 	cout << endl;
 
-	string streamming;
-	cout << "Digite o streamming: ";
-	getline(cin, streamming);
+	string streaming;
+	cout << "Digite o streaming: ";
+	getline(cin, streaming);
 
 	int rating;
 	cout << "Digite o rating: ";
@@ -135,7 +104,7 @@ void Controller::addSerie(void)
 
 	Utils::clearConsole();
 
-	Serie *newSerie = new Serie(name, year, season, numberEp, actorsConcact, charactersConcat, streamming, rating);
+	Serie *newSerie = new Serie(name, year, season, numberEp, actorsConcact, charactersConcat, streaming, rating);
 	newSerie->getAllInfo();
 
 	char confirmation;
@@ -163,14 +132,7 @@ void Controller::addSerie(void)
 
 void Controller::consultSerie(void)
 {
-	vector<Serie *> allseries = serieMemDAO->getAllSeries();
-
-	Utils::printFramedMessage("Series Cadastradas", "*", 21);
-
-	for (int i = 0; i < allseries.size(); i++)
-	{
-		cout << "ID: " << allseries[i]->getId() << " Nome: " << allseries[i]->getName() << endl;
-	}
+	showRegisteredSeries();
 
 	int id;
 	cout << "Digite o ID da serie que deseja consultar: ";
@@ -183,25 +145,28 @@ void Controller::consultSerie(void)
 
 	if (serie != NULL)
 	{
-		Utils::printFramedMessage(serie->getName(), "*", 21);
+		Utils::printFramedMessage(serie->getName(), "-", serie->getName().length());
 		serie->getAllInfo();
 	}
 	else
 	{
 		cout << "Nao foi possivel encontrar esse registro" << endl;
 	}
+	cout << endl;
 }
 
 void Controller::editSerie(void)
 {
+	showRegisteredSeries();
+
 	int id;
-	cout << "Digite o ID da serie" << endl;
+	cout << "Digite o ID da serie: ";
 	cin >> id;
 	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
-	Serie *serie = serieMemDAO->getSerieId(id);
+	cout << endl;
 
-	// Serie a = *serie; como passar um valor por copia e nao referencia?  como utilizar o update:
+	Serie *serie = serieMemDAO->getSerieId(id);
 
 	if (serie != NULL)
 	{
@@ -211,65 +176,49 @@ void Controller::editSerie(void)
 		serie->setName(name);
 
 		int year;
-		cout << "Digite o ano da serie" << endl;
+		cout << "Digite o ano da serie: ";
 		cin >> year;
 		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		serie->setYear(year);
 
 		int season;
-		cout << "Digite a temporada" << endl;
+		cout << "Digite a temporada: ";
 		cin >> season;
 		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		serie->setSeason(season);
 
 		int numberEp;
-		cout << "Digite o numero de episodios" << endl;
+		cout << "Digite o numero de episodios: ";
 		cin >> numberEp;
 		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		serie->setNumberEp(numberEp);
 
-		string actors;
+		cout << endl;
 		string actorsConcact;
-
-		do
-		{
-
-			cout << "Digite um ator: ";
-			getline(cin, actors);
-			actorsConcact.append(actors).append(", ");
-			if (actors == "0")
-				actorsConcact.erase(actorsConcact.size() - 1);
-
-		} while (actors != "0");
-
+		cout << "Para terminar de incluir atores, digite 0." << endl;
+		Utils::concatString(&actorsConcact, "Digite um ator: ");
 		serie->setActors(actorsConcact);
+		cout << endl;
 
-		string characters;
 		string charactersConcat;
-
-		do
-		{
-
-			cout << "Digite um personagem: ";
-			getline(cin, characters);
-			charactersConcat.append(characters).append(", ");
-			if (characters == "0")
-				charactersConcat.erase(charactersConcat.size() - 1);
-
-		} while (characters != "0");
+		cout << "Para terminar de incluir personagens, digite 0." << endl;
+		Utils::concatString(&charactersConcat, "Digite um personagem: ");
+		cout << endl;
 
 		serie->setCharacters(charactersConcat);
 
 		string streaming;
-		cout << "Digite o streaming" << endl;
+		cout << "Digite o streaming: ";
 		getline(cin, streaming);
-		serie->setStreamming(streaming);
+		serie->setStreaming(streaming);
 
 		int rating;
-		cout << "Digite a nota" << endl;
+		cout << "Digite a nota: ";
 		cin >> rating;
 		cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 		serie->setRating(rating);
+
+		cout << endl;
 
 		// serieMemDAO->updateSerie(serie);
 	}
@@ -281,6 +230,8 @@ void Controller::editSerie(void)
 
 void Controller::deleteSerie(void)
 {
+	showRegisteredSeries();
+
 	int id;
 	cout << "Digite o ID da serie" << endl;
 	cin >> id;
@@ -298,36 +249,25 @@ void Controller::deleteSerie(void)
 	}
 }
 
-void Controller::orderByTitle(void)
+void Controller::reportOrderBy(int option)
 {
 	vector<Serie *> series = serieMemDAO->getAllSeries();
 	Report *report = new Report();
-	// report->orderByTitle(series);
-	report->orderBy(series, 1);
+	report->orderBy(series, option);
 }
 
-void Controller::orderByStreaming(void)
+void Controller::showRegisteredSeries(void)
 {
-	vector<Serie *> series = serieMemDAO->getAllSeries();
-	Report *report = new Report();
-	// report->orderByTitle(series);
-	report->orderBy(series, 2);
-}
+	vector<Serie *> allseries = serieMemDAO->getAllSeries();
 
-void Controller::orderByYear(void)
-{
-	vector<Serie *> series = serieMemDAO->getAllSeries();
-	Report *report = new Report();
-	// report->orderByTitle(series);
-	report->orderBy(series, 3);
-}
+	Utils::printFramedMessage("Series Cadastradas", "*", 21);
+	cout << endl;
 
-void Controller::orderByRating(void)
-{
-	vector<Serie *> series = serieMemDAO->getAllSeries();
-	Report *report = new Report();
-	// report->orderByTitle(series);
-	report->orderBy(series, 4);
+	for (int i = 0; i < allseries.size(); i++)
+	{
+		cout << "ID: " << allseries[i]->getId() << " Nome: " << allseries[i]->getName() << endl;
+	}
+	cout << endl;
 }
 
 void Controller::help(void)
@@ -359,6 +299,24 @@ void Controller::launchActions(string title, vector<string> menuItens, vector<vo
 		while (int choice = menu.getChoice())
 		{
 			(this->*functions.at(choice - 1))();
+		}
+	}
+	catch (const exception &myException)
+	{
+		cout << "Um problema ocorreu." << endl;
+	}
+}
+
+void Controller::launchReport(string title, vector<string> menuItens)
+{
+	try
+	{
+		Menu menu(menuItens, title, "Sua opcao: ");
+		menu.setSymbol("*");
+
+		while (int choice = menu.getChoice())
+		{
+			(this->reportOrderBy(choice));
 		}
 	}
 	catch (const exception &myException)
