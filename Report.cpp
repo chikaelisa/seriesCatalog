@@ -5,7 +5,7 @@
 
 using namespace std;
 
-Report::Report() {}
+Report::Report() { }
 
 bool Report::compareBy(Serie *serie1, Serie *serie2, int type)
 {
@@ -23,36 +23,6 @@ bool Report::compareBy(Serie *serie1, Serie *serie2, int type)
 
     return false; // opcao invalida
 }
-
-/*
-bool Report::compareByTitle(Serie* serie1, Serie* serie2)
-{
-    return serie1->getName() < serie2->getName();
-}
-
-bool Report::compareByStreaming(Serie* serie1, Serie* serie2)
-{
-    return serie1->getStreaming() < serie2->getStreaming();
-}
-
-void Report::orderByTitle(vector<Serie*> series)
-{
-    sort(series.begin(), series.end(), compareByTitle);
-    for (const auto& serie : series)
-    {
-        serie->getAllInfo();
-    }
-}
-
-void Report::orderByStreaming(vector<Serie*> series)
-{
-    sort(series.begin(), series.end(), compareByStreaming);
-    for (const auto& serie : series)
-    {
-        serie->getAllInfo();
-    }
-}
-*/
 
 void Report::orderBy(vector<Serie *> series, int type)
 {

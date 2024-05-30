@@ -23,6 +23,9 @@ private:
 	void launchActions(string title, vector<string> menuItens, vector<void (Controller::*)()> functions);
 	void launchReport(string title, vector<string> menuItens);
 
+	void getInfoString(string *info, string message);
+	void getInfoInt(int *info, string message);
+
 	void addSerie(void);
 	void consultSerie(void);
 	void editSerie(void);

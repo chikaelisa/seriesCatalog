@@ -3,7 +3,7 @@
 #include <memory>
 #include <exception>
 #include <vector>
-// #include <windows.h>
+//#include <windows.h>
 // #include <unistd.h>
 #include <ctype.h>
 
@@ -56,6 +56,23 @@ void Controller::reports(void)
 	launchReport("Gerenciar Series", menuItens);
 }
 
+void Controller::getInfoString(string *info, string message) 
+{
+	string newInfo;
+	cout << message;
+	getline(cin, newInfo);
+	*info = newInfo;
+}
+
+void Controller::getInfoInt(int *info, string message)
+{
+	int newInfo;
+	cout << message;
+	cin >> newInfo;
+	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	*info = newInfo;
+}
+
 void Controller::addSerie(void)
 {
 	Utils::printFramedMessage("Cadastro de Serie", "-", 21);
@@ -63,23 +80,16 @@ void Controller::addSerie(void)
 	vector<Serie *> allSeries = serieMemDAO->getAllSeries();
 
 	string name;
-	cout << "Digite o nome da serie: ";
-	getline(cin, name);
+	getInfoString(&name, "Digite o nome da serie: ");
 
 	int year;
-	cout << "Digite o ano da serie: ";
-	cin >> year;
-	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	getInfoInt(&year, "Digite o ano da serie: ");
 
 	int season;
-	cout << "Digite a temporada: ";
-	cin >> season;
-	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	getInfoInt(&season, "Digite a temporada: ");
 
 	int numberEp;
-	cout << "Digite o numero de episodios: ";
-	cin >> numberEp;
-	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	getInfoInt(&numberEp, "Digite o numero de episodios: ");
 
 	cout << endl;
 	cout << "Para terminar de incluir atores, digite 0." << endl;
@@ -94,29 +104,23 @@ void Controller::addSerie(void)
 	cout << endl;
 
 	string streaming;
-	cout << "Digite o streaming: ";
-	getline(cin, streaming);
+	getInfoString(&streaming, "Digite o streaming: ");
 
 	int rating;
-	cout << "Digite o rating: ";
-	cin >> rating;
-	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+	getInfoInt(&rating, "Digite a nota: ");
 
 	Utils::clearConsole();
 
 	Serie *newSerie = new Serie(name, year, season, numberEp, actorsConcact, charactersConcat, streaming, rating);
 	newSerie->getAllInfo();
 
-	char confirmation;
-	cout << endl;
-	cout << "Deseja confirmar a inclusão da serie? (S/N)" << endl;
-	cout << "R: ";
-	cin >> confirmation;
+	string confirmation;
+	getInfoString(&confirmation, "Deseja confirmar a inclusão da serie? (S/N) \nR: ");
 	cout << endl;
 
 	Utils::clearConsole();
 
-	if (toupper(confirmation) == 'N')
+	if (confirmation == "N")
 	{
 		serieMemDAO->deleteSerie(newSerie->getId());
 		cout << "Cadastro de serie cancelado. Retornando ao menu de series..." << endl;
@@ -152,7 +156,6 @@ void Controller::consultSerie(void)
 	{
 		cout << "Nao foi possivel encontrar esse registro" << endl;
 	}
-	cout << endl;
 }
 
 void Controller::editSerie(void)
@@ -219,8 +222,6 @@ void Controller::editSerie(void)
 		serie->setRating(rating);
 
 		cout << endl;
-
-		// serieMemDAO->updateSerie(serie);
 	}
 	else
 	{
@@ -233,7 +234,7 @@ void Controller::deleteSerie(void)
 	showRegisteredSeries();
 
 	int id;
-	cout << "Digite o ID da serie" << endl;
+	cout << "Digite o ID da serie: ";
 	cin >> id;
 	cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 	Serie *serie = serieMemDAO->getSerieId(id);
@@ -272,9 +273,10 @@ void Controller::showRegisteredSeries(void)
 
 void Controller::help(void)
 {
-	Utils::printMessage(SysInfo::getFullVersion() + " | Help");
+	Utils::printMessage(SysInfo::getFullVersion() + " | Ajuda");
+	cout << endl;
 	unique_ptr<TextFromFile> textFromFile(new TextFromFile(SysInfo::getHelpFile()));
-	Utils::printFramedMessage(textFromFile->getFileContent(), "*", 120);
+	cout << textFromFile->getFileContent() << endl;
 }
 
 void Controller::credits(void)
@@ -284,9 +286,11 @@ void Controller::credits(void)
 	text += SysInfo::getAuthor() + "\n";
 	text += SysInfo::getInstitution() + "\n";
 	text += SysInfo::getDepartment() + "\n";
-	text += "Copyright " + SysInfo::getAuthor() + " " + SysInfo::getDate() + "\n";
-	Utils::printMessage(SysInfo::getVersion() + " | About");
-	Utils::printFramedMessage(text, "*", 120);
+	text += "Copyright " + SysInfo::getAuthor() + " " + SysInfo::getDate();
+	Utils::printMessage(SysInfo::getVersion() + " | Sobre");
+	cout << endl;
+	cout << text << endl;
+	cout << endl;
 }
 
 void Controller::launchActions(string title, vector<string> menuItens, vector<void (Controller::*)()> functions)

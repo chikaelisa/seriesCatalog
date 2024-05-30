@@ -1,11 +1,11 @@
 #include "SysInfo.h"
 
 const string SysInfo::authors = "Enzo A. T.; Fernanda R. G. M.; Francisca E. C. R.; Pietra F. A. P.; Stephani S. M.";
-const string SysInfo::date = "2024, May";
+const string SysInfo::date = "Junho, 2024";
 const string SysInfo::department = "Faculdade de Tecnologia - Limeira/SP";
 const string SysInfo::institution = "Universidade Estadual de Campinas (Unicamp)";
-const string SysInfo::systemName = "Series Catalog (STVS) C++";
-const string SysInfo::version = "0.01";
+const string SysInfo::systemName = "Catalogo de Series (STVS) C++";
+const string SysInfo::version = "1.16";
 const string SysInfo::helpFile = "STVSHelp.txt";
 
 const string& SysInfo::getAuthor()

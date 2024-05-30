@@ -112,7 +112,9 @@ void Serie::setRating(int rating)
 
 void Serie::getAllInfo()
 {
-    cout << "Id: " << this->getId() << endl;
+    if (this->getId() != 0)
+        cout << "Id: " << this->getId() << endl;
+
     cout << "Nome: " << this->getName() << endl;
     cout << "Ano: " << this->getYear() << endl;
     cout << "Temporada: " << this->getSeason() << endl;
