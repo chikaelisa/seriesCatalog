@@ -1,7 +1,7 @@
 #include <iomanip>
 #include <memory>
 #include <exception>
-#include <ctype.h>
+#include <cctype>
 
 #include "ControllerSeries.h"
 
@@ -58,6 +58,42 @@ void ControllerSeries::showRegisteredSeries(void)
     cout << endl;
 }
 
+string ControllerSeries::takeMessage(Messages type)
+{
+    switch (type)
+    {
+    case GET_ID:
+        return "Digite o ID da serie: ";
+
+    case GET_NAME:
+        return "Digite o nome da serie: ";
+
+    case GET_ACTORS:
+        return "Digite um ator: ";
+
+    case GET_CHARS:
+        return "Digite um personagem: ";
+
+    case GET_RATING:
+        return "Digite a nota da serie: ";
+
+    case GET_EPISODES:
+        return "Digite o numero de episodios: ";
+
+    case GET_SEASON:
+        return "Digite a temporada: ";
+
+    case GET_YEAR:
+        return "Digite o ano da serie: ";
+
+    case GET_STREAMING:
+        return "Digite o streaming: ";
+
+    default:
+        return "";
+    }
+}
+
 void ControllerSeries::addSerie(void)
 {
     Utils::printFramedMessage("Cadastro de Serie", "-", 21);
@@ -65,58 +101,71 @@ void ControllerSeries::addSerie(void)
     vector<Serie *> allSeries = serieMemDAO->getAllSeries();
 
     string name;
-    getInfoString(&name, "Digite o nome da serie: ");
+    getInfoString(&name, takeMessage(GET_NAME));
 
     int year;
-    getInfoInt(&year, "Digite o ano da serie: ");
+    getInfoInt(&year, takeMessage(GET_YEAR));
 
     int season;
-    getInfoInt(&season, "Digite a temporada: ");
+    getInfoInt(&season, takeMessage(GET_SEASON));
 
     int numberEp;
-    getInfoInt(&numberEp, "Digite o numero de episodios: ");
+    getInfoInt(&numberEp, takeMessage(GET_EPISODES));
 
     cout << endl;
     cout << "Para terminar de incluir atores, digite 0." << endl;
     string actorsConcact;
-    Utils::concatString(&actorsConcact, "Digite um ator: ");
+    Utils::concatString(&actorsConcact, takeMessage(GET_ACTORS));
 
     cout << endl;
     cout << "Para terminar de incluir personagens, digite 0." << endl;
     string charactersConcat = "";
-    Utils::concatString(&charactersConcat, "Digite um personagem: ");
+    Utils::concatString(&charactersConcat, takeMessage(GET_CHARS));
 
     cout << endl;
 
     string streaming;
-    getInfoString(&streaming, "Digite o streaming: ");
+    getInfoString(&streaming, takeMessage(GET_STREAMING));
 
     int rating;
-    getInfoInt(&rating, "Digite a nota: ");
+    getInfoInt(&rating, takeMessage(GET_RATING));
 
     Utils::clearConsole();
 
     Serie *newSerie = new Serie(name, year, season, numberEp, actorsConcact, charactersConcat, streaming, rating);
-    newSerie->getAllInfo();
 
     string confirmation;
-    getInfoString(&confirmation, "Deseja confirmar a inclusão da serie? (S/N) \nR: ");
-    cout << endl;
-
-    Utils::clearConsole();
-
-    if (confirmation == "N")
+    do
     {
-        serieMemDAO->deleteSerie(newSerie->getId());
-        cout << "Cadastro de serie cancelado. Retornando ao menu de series..." << endl;
+        newSerie->getAllInfo();
+        getInfoString(&confirmation, "Deseja confirmar a inclusão da serie? (S/N) \nR: ");
         cout << endl;
-    }
-    else
-    {
-        serieMemDAO->addSerie(newSerie);
-        cout << "Serie cadastrada com sucesso. Retornando ao menu de series..." << endl;
-        cout << endl;
-    }
+
+        for (char &c : confirmation)
+            c = std::toupper(c);
+
+        if (confirmation == "N")
+        {
+            serieMemDAO->deleteSerie(newSerie->getId());
+            cout << "Cadastro de serie cancelado. Retornando ao menu de series..." << endl;
+            cout << endl;
+            Utils::sleep(3);
+            Utils::clearConsole();
+        }
+        else if (confirmation == "S")
+        {
+            serieMemDAO->addSerie(newSerie);
+            cout << "Serie cadastrada com sucesso. Retornando ao menu de series..." << endl;
+            cout << endl;
+            Utils::sleep(3);
+            Utils::clearConsole();
+        }
+        else
+        {
+            Utils::clearConsole();
+        }
+
+    } while (confirmation != "N" && confirmation != "S");
 }
 
 void ControllerSeries::consultSerie(void)
@@ -252,3 +301,17 @@ void ControllerSeries::launchActionsSeries(string title, vector<string> menuIten
         cout << "Um problema ocorreu." << endl;
     }
 }
+
+// string ControllerSeries::messageText(Messages message)
+// {
+//     switch (message)
+//     {
+//     case GET_ID:
+//         return "Digite o ID da serie: ";
+//     case GET_NAME:
+//         return "Digite o nome da serie: ";
+
+//     default:
+//         return "";
+//     }
+// }

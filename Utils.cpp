@@ -53,3 +53,8 @@ void Utils::concatString(string *info, string message)
 
 	} while (newInfo != "0");
 }
+
+void Utils::sleep(int seconds)
+{
+	std::this_thread::sleep_for(std::chrono::seconds(seconds));
+}

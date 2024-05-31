@@ -9,6 +9,21 @@
 
 using namespace std;
 
+enum Messages
+{
+    GET_ID,
+    GET_NAME,
+    GET_YEAR,
+    GET_SEASON,
+    GET_EPISODES,
+    GET_ACTORS,
+    GET_CHARS,
+    GET_STREAMING,
+    GET_RATING,
+    MESSAGE_COUNT // para tamanho do array de mapeamento
+
+};
+
 class ControllerSeries final
 {
 private:
@@ -19,11 +34,12 @@ private:
 
     void showRegisteredSeries(void);
 
+    string takeMessage(Messages type);
+
 public:
     AbstractSerieDAO *serieMemDAO;
     ControllerSeries();
     virtual ~ControllerSeries();
-
     void launchActionsSeries(string title, vector<string> menuItens, vector<void (ControllerSeries::*)()> functions);
     void addSerie(void);
     void consultSerie(void);
