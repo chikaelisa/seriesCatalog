@@ -5,16 +5,16 @@
 #include <vector>
 #include <iostream>
 
-#include "MemoryDBConnection.h"
 #include "AbstractSerieDAO.h"
+#include "ControllerSeries.h"
 
 using namespace std;
 
 class Controller final
 {
 private:
-	MemoryDBConnection *memoryDBConnection;
 	AbstractSerieDAO *serieMemDAO;
+	ControllerSeries *controllerSeries;
 
 	void seriesMenu(void);
 	void reports(void);
@@ -23,17 +23,7 @@ private:
 	void launchActions(string title, vector<string> menuItens, vector<void (Controller::*)()> functions);
 	void launchReport(string title, vector<string> menuItens);
 
-	void getInfoString(string *info, string message);
-	void getInfoInt(int *info, string message);
-
-	void addSerie(void);
-	void consultSerie(void);
-	void editSerie(void);
-	void deleteSerie(void);
-
 	void reportOrderBy(int option);
-
-	void showRegisteredSeries(void);
 
 public:
 	Controller();

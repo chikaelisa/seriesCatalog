@@ -4,7 +4,6 @@
 
 #include <string>
 #include <iostream>
-#include <vector>
 
 using namespace std;
 
@@ -20,7 +19,6 @@ private:
     string characters;
     string streaming;
     int rating;
-    // void printVectorString(const vector<string> &vec, string sep);
 
 public:
     Serie(int id, string name, int year, int season, int numberEp, string actors, string characters, string streaming, int rating);

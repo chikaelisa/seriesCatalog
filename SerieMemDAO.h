@@ -2,26 +2,19 @@
 #ifndef SERIEMEMDAO_H_
 #define SERIEMEMDAO_H_
 
-// #include <string>
-// #include <iostream>
-// #include <vector>
-
 #include "AbstractSerieDAO.h"
 #include "MemoryDBConnection.h"
-
-// using namespace std;
 
 class SerieMemDAO : public AbstractSerieDAO
 {
 private:
 	MemoryDBConnection *memoryDBConnection;
-	static int lastSerieId; // mudar isso aqui porque so faz sentido nos usuarios do projeto do angelis. Coloquei pra poder compilar sem erro
+	static int lastSerieId;
 
 public:
 	SerieMemDAO(MemoryDBConnection *memoryDBConnection);
 	virtual ~SerieMemDAO();
 
-	// Retirei a herança da classe abstrata e removi os "virtual"
 	vector<Serie *> getAllSeries();
 	Serie *getSerieId(int serieId);
 	void addSerie(Serie *serie);

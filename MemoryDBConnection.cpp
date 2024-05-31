@@ -1,15 +1,4 @@
-/*
- * MemoryDBConnection.cpp
- *
- *  Created on: Mar 22, 2024
- *      Author: andre
- */
-
-#include <vector>
-#include <iostream>
 #include "MemoryDBConnection.h"
-
-using namespace std;
 
 MemoryDBConnection::MemoryDBConnection()
 {

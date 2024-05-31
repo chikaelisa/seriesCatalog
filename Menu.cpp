@@ -1,12 +1,3 @@
-/*
- * Menu.cpp
- *
- *  Created on: Mar 12, 2024
- *      Author: andre
- *
- *  Adapted on May 04, 2024
- */
-
 #include <math.h>
 #include <cstdlib>
 
