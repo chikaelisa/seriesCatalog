@@ -27,21 +27,241 @@ ControllerSeries::~ControllerSeries()
     // nothing
 }
 
-void ControllerSeries::getInfoString(string *info, string message)
+void ControllerSeries::addSerie(void)
 {
-    string newInfo;
-    cout << message;
-    getline(cin, newInfo);
-    *info = newInfo;
+    Utils::printFramedMessage("Cadastro de Serie", "-", 21);
+
+    vector<Serie *> allSeries = serieMemDAO->getAllSeries();
+
+    Serie *newSerie = new Serie("", 0, 0, 0, "", "", "", 0);
+
+    getName(newSerie);
+    getYear(newSerie);
+    getSeason(newSerie);
+    getEpisodes(newSerie);
+    getActors(newSerie);
+    getCharacters(newSerie);
+
+    cout << endl;
+
+    getStreaming(newSerie);
+    getRating(newSerie);
+
+    Utils::clearConsole();
+
+    confirmInclusion(newSerie);
 }
 
-void ControllerSeries::getInfoInt(int *info, string message)
+void ControllerSeries::consultSerie(void)
 {
-    int newInfo;
-    cout << message;
-    cin >> newInfo;
+    showRegisteredSeries();
+
+    int id;
+    cout << takeMessage(GET_ID);
+    cin >> id;
     cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    *info = newInfo;
+
+    Serie *serie = serieMemDAO->getSerieId(id);
+
+    Utils::clearConsole();
+
+    if (serie != NULL)
+    {
+        Utils::printFramedMessage(serie->getName(), "-", serie->getName().length());
+        serie->getAllInfo();
+    }
+    else
+    {
+        cout << "Nao foi possivel encontrar esse registro" << endl;
+    }
+}
+
+void ControllerSeries::editSerie(void)
+{
+    vector<string> menuItens{"Nome", "Ano", "Temporada", "Atores",
+                             "Personages", "Streaming", "Nota", "Voltar"};
+    vector<void (ControllerSeries::*)(Serie *serie)> functions{
+        &ControllerSeries::getName,
+        &ControllerSeries::getYear,
+        &ControllerSeries::getSeason,
+        &ControllerSeries::getActors,
+        &ControllerSeries::getCharacters,
+        &ControllerSeries::getStreaming,
+        &ControllerSeries::getRating,
+    };
+    showRegisteredSeries();
+
+    int id;
+    cout << takeMessage(GET_ID);
+    cin >> id;
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+    cout << endl;
+
+    Serie *serie = serieMemDAO->getSerieId(id);
+
+    if (serie != NULL)
+    {
+        launchActionsGetInfo("O que deseja editar?", menuItens, serie, functions);
+
+        cout << endl;
+        serie->getAllInfo();
+        cout << endl;
+    }
+    else
+    {
+        cout << "Nao foi possivel encontrar esse registro" << endl;
+    }
+}
+
+void ControllerSeries::deleteSerie(void)
+{
+    showRegisteredSeries();
+
+    int id;
+    cout << takeMessage(GET_ID);
+    cin >> id;
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    Serie *serie = serieMemDAO->getSerieId(id);
+
+    if (serie != NULL)
+    {
+        serie->getAllInfo();
+        char confirmation;
+        do
+        {
+            cout << "Deseja excluir esse registro?(S/N)\nEsta acao nao pode ser desfeita.\nR:";
+            cin >> confirmation;
+            // TODO: arrumar toupper
+            toupper(confirmation);
+            if (confirmation == 'S')
+            {
+                serieMemDAO->deleteSerie(id);
+                cout << "Serie excluida com sucesso. Retornando ao menu de series..." << endl;
+                Utils::sleep(3);
+                Utils::clearConsole();
+            }
+            else if (confirmation == 'N')
+            {
+                cout << "Acao cancelada. Retornado ao menu de series..." << endl;
+                Utils::sleep(3);
+                Utils::clearConsole();
+            }
+
+        } while (confirmation != 'N' && confirmation != 'S');
+    }
+    else
+    {
+        cout << "Nao foi possivel encontrar esse registro." << endl;
+    }
+}
+
+void ControllerSeries::launchActionsSeries(string title, vector<string> menuItens, vector<void (ControllerSeries::*)()> functions)
+{
+    try
+    {
+        Menu menu(menuItens, title, "Sua opcao: ");
+        menu.setSymbol("*");
+
+        while (int choice = menu.getChoice())
+        {
+            (this->*functions.at(choice - 1))();
+        }
+    }
+    catch (const exception &myException)
+    {
+        cout << "Um problema ocorreu." << endl;
+    }
+}
+
+void ControllerSeries::launchActionsGetInfo(string title, vector<string> menuItens, Serie *serie, vector<void (ControllerSeries::*)(Serie *serie)> functions)
+{
+    try
+    {
+        Menu menu(menuItens, title, "Sua opcao: ");
+        menu.setSymbol("-");
+
+        serie->getAllInfo();
+
+        while (int choice = menu.getChoice())
+        {
+            (this->*functions.at(choice - 1))(serie);
+        }
+    }
+    catch (const exception &myException)
+    {
+        cout << "Um problema ocorreu." << endl;
+    }
+}
+void ControllerSeries::getName(Serie *serie)
+{
+    string name;
+    cout << takeMessage(GET_NAME);
+    getline(cin, name);
+    serie->setName(name);
+}
+
+void ControllerSeries::getYear(Serie *serie)
+{
+    int year;
+    cout << takeMessage(GET_YEAR);
+    cin >> year;
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    serie->setYear(year);
+}
+
+void ControllerSeries::getSeason(Serie *serie)
+{
+    int season;
+    cout << takeMessage(GET_SEASON);
+    cin >> season;
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    serie->setSeason(season);
+}
+
+void ControllerSeries::getEpisodes(Serie *serie)
+{
+    int numberEp;
+    cout << takeMessage(GET_EPISODES);
+    cin >> numberEp;
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    serie->setNumberEp(numberEp);
+}
+
+void ControllerSeries::getActors(Serie *serie)
+{
+    cout << endl;
+
+    string actorsConcact;
+    cout << "Para terminar de incluir atores, digite 0." << endl;
+    Utils::concatString(&actorsConcact, takeMessage(GET_ACTORS));
+    serie->setActors(actorsConcact);
+}
+
+void ControllerSeries::getCharacters(Serie *serie)
+{
+    cout << endl;
+
+    string charactersConcat;
+    cout << "Para terminar de incluir personagens, digite 0." << endl;
+    Utils::concatString(&charactersConcat, takeMessage(GET_CHARS));
+    serie->setCharacters(charactersConcat);
+}
+
+void ControllerSeries::getStreaming(Serie *serie)
+{
+    string streaming;
+    cout << takeMessage(GET_STREAMING);
+    getline(cin, streaming);
+    serie->setStreaming(streaming);
+}
+void ControllerSeries::getRating(Serie *serie)
+{
+    int rating;
+    cout << takeMessage(GET_RATING);
+    cin >> rating;
+    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+    serie->setRating(rating);
 }
 
 void ControllerSeries::showRegisteredSeries(void)
@@ -56,6 +276,43 @@ void ControllerSeries::showRegisteredSeries(void)
         cout << "ID: " << allseries[i]->getId() << " Nome: " << allseries[i]->getName() << endl;
     }
     cout << endl;
+}
+
+void ControllerSeries::confirmInclusion(Serie *serie)
+{
+    char confirmation;
+    do
+    {
+        serie->getAllInfo();
+        cout << takeMessage(CONFIRM_INCLUSION);
+        cin >> confirmation;
+
+        cout << endl;
+
+        toupper(confirmation);
+
+        if (confirmation == 'N')
+        {
+            serieMemDAO->deleteSerie(serie->getId());
+            cout << takeMessage(CANCELED_INCLUSION) << endl;
+            cout << endl;
+            Utils::sleep(3);
+            Utils::clearConsole();
+        }
+        else if (confirmation == 'S')
+        {
+            serieMemDAO->addSerie(serie);
+            cout << takeMessage(SUCCESS_INCLUSION) << endl;
+            cout << endl;
+            Utils::sleep(3);
+            Utils::clearConsole();
+        }
+        else
+        {
+            Utils::clearConsole();
+        }
+
+    } while (confirmation != 'N' && confirmation != 'S');
 }
 
 string ControllerSeries::takeMessage(Messages type)
@@ -89,229 +346,16 @@ string ControllerSeries::takeMessage(Messages type)
     case GET_STREAMING:
         return "Digite o streaming: ";
 
+    case CONFIRM_INCLUSION:
+        return "Deseja confirmar a inclusão da serie? (S/N) \nR: ";
+
+    case CANCELED_INCLUSION:
+        return "Cadastro de serie cancelado. Retornando ao menu de series...";
+
+    case SUCCESS_INCLUSION:
+        return "Serie cadastrada com sucesso. Retornando ao menu de series...";
+
     default:
         return "";
     }
 }
-
-void ControllerSeries::addSerie(void)
-{
-    Utils::printFramedMessage("Cadastro de Serie", "-", 21);
-
-    vector<Serie *> allSeries = serieMemDAO->getAllSeries();
-
-    string name;
-    getInfoString(&name, takeMessage(GET_NAME));
-
-    int year;
-    getInfoInt(&year, takeMessage(GET_YEAR));
-
-    int season;
-    getInfoInt(&season, takeMessage(GET_SEASON));
-
-    int numberEp;
-    getInfoInt(&numberEp, takeMessage(GET_EPISODES));
-
-    cout << endl;
-    cout << "Para terminar de incluir atores, digite 0." << endl;
-    string actorsConcact;
-    Utils::concatString(&actorsConcact, takeMessage(GET_ACTORS));
-
-    cout << endl;
-    cout << "Para terminar de incluir personagens, digite 0." << endl;
-    string charactersConcat = "";
-    Utils::concatString(&charactersConcat, takeMessage(GET_CHARS));
-
-    cout << endl;
-
-    string streaming;
-    getInfoString(&streaming, takeMessage(GET_STREAMING));
-
-    int rating;
-    getInfoInt(&rating, takeMessage(GET_RATING));
-
-    Utils::clearConsole();
-
-    Serie *newSerie = new Serie(name, year, season, numberEp, actorsConcact, charactersConcat, streaming, rating);
-
-    string confirmation;
-    do
-    {
-        newSerie->getAllInfo();
-        getInfoString(&confirmation, "Deseja confirmar a inclusão da serie? (S/N) \nR: ");
-        cout << endl;
-
-        for (char &c : confirmation)
-            c = std::toupper(c);
-
-        if (confirmation == "N")
-        {
-            serieMemDAO->deleteSerie(newSerie->getId());
-            cout << "Cadastro de serie cancelado. Retornando ao menu de series..." << endl;
-            cout << endl;
-            Utils::sleep(3);
-            Utils::clearConsole();
-        }
-        else if (confirmation == "S")
-        {
-            serieMemDAO->addSerie(newSerie);
-            cout << "Serie cadastrada com sucesso. Retornando ao menu de series..." << endl;
-            cout << endl;
-            Utils::sleep(3);
-            Utils::clearConsole();
-        }
-        else
-        {
-            Utils::clearConsole();
-        }
-
-    } while (confirmation != "N" && confirmation != "S");
-}
-
-void ControllerSeries::consultSerie(void)
-{
-    showRegisteredSeries();
-
-    int id;
-    cout << "Digite o ID da serie que deseja consultar: ";
-    cin >> id;
-    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-    Utils::clearConsole();
-
-    Serie *serie = serieMemDAO->getSerieId(id);
-
-    if (serie != NULL)
-    {
-        Utils::printFramedMessage(serie->getName(), "-", serie->getName().length());
-        serie->getAllInfo();
-    }
-    else
-    {
-        cout << "Nao foi possivel encontrar esse registro" << endl;
-    }
-}
-
-void ControllerSeries::editSerie(void)
-{
-    showRegisteredSeries();
-
-    int id;
-    cout << "Digite o ID da serie: ";
-    cin >> id;
-    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-    cout << endl;
-
-    Serie *serie = serieMemDAO->getSerieId(id);
-
-    if (serie != NULL)
-    {
-        string name;
-        cout << "Digite o nome da serie: ";
-        getline(cin, name);
-        serie->setName(name);
-
-        int year;
-        cout << "Digite o ano da serie: ";
-        cin >> year;
-        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        serie->setYear(year);
-
-        int season;
-        cout << "Digite a temporada: ";
-        cin >> season;
-        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        serie->setSeason(season);
-
-        int numberEp;
-        cout << "Digite o numero de episodios: ";
-        cin >> numberEp;
-        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        serie->setNumberEp(numberEp);
-
-        cout << endl;
-        string actorsConcact;
-        cout << "Para terminar de incluir atores, digite 0." << endl;
-        Utils::concatString(&actorsConcact, "Digite um ator: ");
-        serie->setActors(actorsConcact);
-        cout << endl;
-
-        string charactersConcat;
-        cout << "Para terminar de incluir personagens, digite 0." << endl;
-        Utils::concatString(&charactersConcat, "Digite um personagem: ");
-        cout << endl;
-
-        serie->setCharacters(charactersConcat);
-
-        string streaming;
-        cout << "Digite o streaming: ";
-        getline(cin, streaming);
-        serie->setStreaming(streaming);
-
-        int rating;
-        cout << "Digite a nota: ";
-        cin >> rating;
-        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-        serie->setRating(rating);
-
-        cout << endl;
-    }
-    else
-    {
-        cout << "Nao foi possivel encontrar esse registro" << endl;
-    }
-}
-
-void ControllerSeries::deleteSerie(void)
-{
-    showRegisteredSeries();
-
-    int id;
-    cout << "Digite o ID da serie: ";
-    cin >> id;
-    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    Serie *serie = serieMemDAO->getSerieId(id);
-
-    if (serie != NULL)
-    {
-        serieMemDAO->deleteSerie(id);
-        cout << "Serie excluida com sucesso" << endl;
-    }
-    else
-    {
-        cout << "Nao foi possivel encontrar esse registro" << endl;
-    }
-}
-
-void ControllerSeries::launchActionsSeries(string title, vector<string> menuItens, vector<void (ControllerSeries::*)()> functions)
-{
-    try
-    {
-        Menu menu(menuItens, title, "Sua opcao: ");
-        menu.setSymbol("*");
-
-        while (int choice = menu.getChoice())
-        {
-            (this->*functions.at(choice - 1))();
-        }
-    }
-    catch (const exception &myException)
-    {
-        cout << "Um problema ocorreu." << endl;
-    }
-}
-
-// string ControllerSeries::messageText(Messages message)
-// {
-//     switch (message)
-//     {
-//     case GET_ID:
-//         return "Digite o ID da serie: ";
-//     case GET_NAME:
-//         return "Digite o nome da serie: ";
-
-//     default:
-//         return "";
-//     }
-// }

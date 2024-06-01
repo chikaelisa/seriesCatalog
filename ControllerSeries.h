@@ -20,7 +20,9 @@ enum Messages
     GET_CHARS,
     GET_STREAMING,
     GET_RATING,
-    MESSAGE_COUNT // para tamanho do array de mapeamento
+    CONFIRM_INCLUSION,
+    SUCCESS_INCLUSION,
+    CANCELED_INCLUSION,
 
 };
 
@@ -29,12 +31,20 @@ class ControllerSeries final
 private:
     MemoryDBConnection *memoryDBConnection;
 
-    void getInfoString(string *info, string message);
-    void getInfoInt(int *info, string message);
-
+    void getName(Serie *serie);
+    void getYear(Serie *serie);
+    void getSeason(Serie *serie);
+    void getEpisodes(Serie *serie);
+    void getActors(Serie *serie);
+    void getCharacters(Serie *serie);
+    void getStreaming(Serie *serie);
+    void getRating(Serie *serie);
     void showRegisteredSeries(void);
+    void confirmInclusion(Serie *serie);
 
     string takeMessage(Messages type);
+
+    void launchActionsGetInfo(string title, vector<string> menuItens, Serie *serie, vector<void (ControllerSeries::*)(Serie *serie)> functions);
 
 public:
     AbstractSerieDAO *serieMemDAO;
