@@ -23,6 +23,7 @@ enum Messages
     CONFIRM_INCLUSION,
     SUCCESS_INCLUSION,
     CANCELED_INCLUSION,
+    REGISTERED_NOT_FOUND,
 
 };
 
@@ -39,12 +40,12 @@ private:
     void getCharacters(Serie *serie);
     void getStreaming(Serie *serie);
     void getRating(Serie *serie);
-    void showRegisteredSeries(void);
+    void showRegisteredSeries(vector<Serie *> allseries);
     void confirmInclusion(Serie *serie);
-
     string takeMessage(Messages type);
 
     void launchActionsGetInfo(string title, vector<string> menuItens, Serie *serie, vector<void (ControllerSeries::*)(Serie *serie)> functions);
+    // void getInfoSerie(string title, vector<string> menuItens, Serie *serie, void (Serie::*)() function); -> passar o vector mesmo
 
 public:
     AbstractSerieDAO *serieMemDAO;

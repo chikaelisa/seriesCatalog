@@ -26,7 +26,7 @@ void Serie::setId(int id)
     }
     else
     {
-        throw new runtime_error("Operacao invalida. Use um id valido.");
+        throw runtime_error("Operacao invalida. Use um id valido.");
     }
 }
 

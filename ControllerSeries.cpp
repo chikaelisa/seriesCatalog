@@ -16,15 +16,15 @@ ControllerSeries::ControllerSeries()
 {
     serieMemDAO = new SerieMemDAO(new MemoryDBConnection());
 
-    serieMemDAO->addSerie(new Serie("Elementary", 2021, 3, 24, "Fernanda, Chika, Ste", "Enzo, Pietra", "Netflix", 10));
-    serieMemDAO->addSerie(new Serie("Sex Education", 2024, 3, 16, "Rosa, Andre, Ste", "Enzo, Pietra", "Prime Video", 8));
-    serieMemDAO->addSerie(new Serie("Flash", 2022, 3, 20, "Genilda, Chika, Amarildo", "Enzo, Pietra", "Max", 5));
-    serieMemDAO->addSerie(new Serie("B99", 2022, 3, 20, "Márcia Aragão, Rosa da Silva, Fábio Porchat", "Jake Peral, Amy, Boyle", "HBO Max", 5));
+    // serieMemDAO->addSerie(new Serie("Elementary", 2021, 3, 24, "Fernanda, Chika, Ste", "Enzo, Pietra", "Netflix", 10));
+    // serieMemDAO->addSerie(new Serie("Sex Education", 2024, 3, 16, "Rosa, Andre, Ste", "Enzo, Pietra", "Prime Video", 8));
+    // serieMemDAO->addSerie(new Serie("Flash", 2022, 3, 20, "Genilda, Chika, Amarildo", "Enzo, Pietra", "Max", 5));
+    // serieMemDAO->addSerie(new Serie("B99", 2022, 3, 20, "Márcia Aragão, Rosa da Silva, Fábio Porchat", "Jake Peral, Amy, Boyle", "HBO Max", 5));
 }
 
 ControllerSeries::~ControllerSeries()
 {
-    // nothing
+    // delete serieMemDAO;
 }
 
 void ControllerSeries::addSerie(void)
@@ -54,25 +54,30 @@ void ControllerSeries::addSerie(void)
 
 void ControllerSeries::consultSerie(void)
 {
-    showRegisteredSeries();
+    vector<Serie *> allseries = serieMemDAO->getAllSeries();
+    showRegisteredSeries(allseries);
 
-    int id;
-    cout << takeMessage(GET_ID);
-    cin >> id;
-    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-    Serie *serie = serieMemDAO->getSerieId(id);
-
-    Utils::clearConsole();
-
-    if (serie != NULL)
+    if (allseries.size() > 0)
     {
-        Utils::printFramedMessage(serie->getName(), "-", serie->getName().length());
-        serie->getAllInfo();
-    }
-    else
-    {
-        cout << "Nao foi possivel encontrar esse registro" << endl;
+
+        int id;
+        cout << takeMessage(GET_ID);
+        cin >> id;
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+
+        Serie *serie = serieMemDAO->getSerieId(id);
+
+        Utils::clearConsole();
+
+        if (serie != NULL)
+        {
+            Utils::printFramedMessage(serie->getName(), "-", serie->getName().length());
+            serie->getAllInfo();
+        }
+        else
+        {
+            cout << takeMessage(REGISTERED_NOT_FOUND) << endl;
+        }
     }
 }
 
@@ -89,70 +94,78 @@ void ControllerSeries::editSerie(void)
         &ControllerSeries::getStreaming,
         &ControllerSeries::getRating,
     };
-    showRegisteredSeries();
-
-    int id;
-    cout << takeMessage(GET_ID);
-    cin >> id;
-    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-
-    cout << endl;
-
-    Serie *serie = serieMemDAO->getSerieId(id);
-
-    if (serie != NULL)
+    vector<Serie *> allseries = serieMemDAO->getAllSeries();
+    showRegisteredSeries(allseries);
+    if (allseries.size() > 0)
     {
-        launchActionsGetInfo("O que deseja editar?", menuItens, serie, functions);
+
+        int id;
+        cout << takeMessage(GET_ID);
+        cin >> id;
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
 
         cout << endl;
-        serie->getAllInfo();
-        cout << endl;
-    }
-    else
-    {
-        cout << "Nao foi possivel encontrar esse registro" << endl;
+
+        Serie *serie = serieMemDAO->getSerieId(id);
+
+        if (serie != NULL)
+        {
+            launchActionsGetInfo("O que deseja editar?", menuItens, serie, functions);
+
+            cout << endl;
+            serie->getAllInfo();
+            cout << endl;
+        }
+        else
+        {
+            cout << takeMessage(REGISTERED_NOT_FOUND) << endl;
+        }
     }
 }
 
 void ControllerSeries::deleteSerie(void)
 {
-    showRegisteredSeries();
+    vector<Serie *> allseries = serieMemDAO->getAllSeries();
+    showRegisteredSeries(allseries);
 
-    int id;
-    cout << takeMessage(GET_ID);
-    cin >> id;
-    cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
-    Serie *serie = serieMemDAO->getSerieId(id);
-
-    if (serie != NULL)
+    if (allseries.size() > 0)
     {
-        serie->getAllInfo();
-        char confirmation;
-        do
+        int id;
+        cout << takeMessage(GET_ID);
+        cin >> id;
+        cin.ignore(std::numeric_limits<std::streamsize>::max(), '\n');
+        Serie *serie = serieMemDAO->getSerieId(id);
+
+        if (serie != NULL)
         {
-            cout << "Deseja excluir esse registro?(S/N)\nEsta acao nao pode ser desfeita.\nR:";
-            cin >> confirmation;
-            // TODO: arrumar toupper
-            toupper(confirmation);
-            if (confirmation == 'S')
+            serie->getAllInfo();
+            char confirmation;
+            do
             {
-                serieMemDAO->deleteSerie(id);
-                cout << "Serie excluida com sucesso. Retornando ao menu de series..." << endl;
-                Utils::sleep(3);
-                Utils::clearConsole();
-            }
-            else if (confirmation == 'N')
-            {
-                cout << "Acao cancelada. Retornado ao menu de series..." << endl;
-                Utils::sleep(3);
-                Utils::clearConsole();
-            }
+                cout << "Deseja excluir esse registro?(S/N)\nEsta acao nao pode ser desfeita.\nR:";
+                cin >> confirmation;
+                // TODO: arrumar toupper
+                toupper(confirmation);
+                if (confirmation == 'S')
+                {
+                    serieMemDAO->deleteSerie(id);
+                    cout << "Serie excluida com sucesso. Retornando ao menu de series..." << endl;
+                    Utils::sleep(3);
+                    Utils::clearConsole();
+                }
+                else if (confirmation == 'N')
+                {
+                    cout << "Acao cancelada. Retornado ao menu de series..." << endl;
+                    Utils::sleep(3);
+                    Utils::clearConsole();
+                }
 
-        } while (confirmation != 'N' && confirmation != 'S');
-    }
-    else
-    {
-        cout << "Nao foi possivel encontrar esse registro." << endl;
+            } while (confirmation != 'N' && confirmation != 'S');
+        }
+        else
+        {
+            cout << takeMessage(REGISTERED_NOT_FOUND) << endl;
+        }
     }
 }
 
@@ -264,18 +277,24 @@ void ControllerSeries::getRating(Serie *serie)
     serie->setRating(rating);
 }
 
-void ControllerSeries::showRegisteredSeries(void)
+void ControllerSeries::showRegisteredSeries(vector<Serie *> allseries)
 {
-    vector<Serie *> allseries = serieMemDAO->getAllSeries();
 
-    Utils::printFramedMessage("Series Cadastradas", "*", 21);
-    cout << endl;
-
-    for (int i = 0; i < allseries.size(); i++)
+    if (allseries.size() > 0)
     {
-        cout << "ID: " << allseries[i]->getId() << " Nome: " << allseries[i]->getName() << endl;
+        Utils::printFramedMessage("Series Cadastradas", "*", 21);
+        cout << endl;
+
+        for (int i = 0; i < allseries.size(); i++)
+        {
+            cout << "ID: " << allseries[i]->getId() << " Nome: " << allseries[i]->getName() << endl;
+        }
+        cout << endl;
     }
-    cout << endl;
+    else
+    {
+        cout << "Nenhuma serie cadastrada" << endl;
+    }
 }
 
 void ControllerSeries::confirmInclusion(Serie *serie)
@@ -354,6 +373,9 @@ string ControllerSeries::takeMessage(Messages type)
 
     case SUCCESS_INCLUSION:
         return "Serie cadastrada com sucesso. Retornando ao menu de series...";
+
+    case REGISTERED_NOT_FOUND:
+        return "Nao foi possivel encontrar esse registro.";
 
     default:
         return "";
