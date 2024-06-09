@@ -1,11 +1,8 @@
-#include <iostream>
 #include <algorithm>
 
 #include "Report.h"
 
-using namespace std;
-
-Report::Report() { }
+Report::Report() {}
 
 bool Report::compareBy(Serie *serie1, Serie *serie2, int type)
 {

@@ -1,12 +1,6 @@
 
-#include <string>
-#include <iostream>
-#include <vector>
-
 #include "Serie.h"
 #include "Utils.h"
-
-using namespace std;
 
 Serie::Serie(int id, string name, int year, int season, int numberEp, string actors, string characters, string streaming, int rating) : id(id), name(name), year(year), season(season), numberEp(numberEp), actors(actors), characters(characters), streaming(streaming), rating(rating)
 {
@@ -32,7 +26,7 @@ void Serie::setId(int id)
     }
     else
     {
-        throw new runtime_error("Operacao invalida. Use um id valido.");
+        throw runtime_error("Operacao invalida. Use um id valido.");
     }
 }
 

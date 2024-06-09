@@ -1,6 +1,6 @@
 #include "SerieMemDAO.h"
 
-int SerieMemDAO::lastSerieId = 0; // mudar isso aqui porque so faz sentido nos usuarios do projeto do angelis. Coloquei pra poder compilar sem erro
+int SerieMemDAO::lastSerieId = 0;
 
 SerieMemDAO::SerieMemDAO(MemoryDBConnection *memoryDBConnection) : memoryDBConnection(memoryDBConnection)
 {
