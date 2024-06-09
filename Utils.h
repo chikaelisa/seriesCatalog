@@ -4,8 +4,6 @@
 #include <string>
 #include <iostream>
 #include <cstdlib>
-#include <thread> // Necessário para std::this_thread::sleep_for
-#include <chrono> // Necessário para std::chrono::seconds
 
 using namespace std;
 
@@ -17,7 +15,6 @@ public:
 	static string replicate(string text, int times);
 	static void clearConsole();
 	static void concatString(string *info, string message);
-	static void sleep(int seconds);
 };
 
 #endif /* UTILS_H_ */

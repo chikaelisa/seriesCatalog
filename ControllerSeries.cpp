@@ -1,7 +1,6 @@
 #include <iomanip>
 #include <memory>
 #include <exception>
-#include <cctype>
 
 #include "ControllerSeries.h"
 
@@ -16,15 +15,16 @@ ControllerSeries::ControllerSeries()
 {
     serieMemDAO = new SerieMemDAO(new MemoryDBConnection());
 
-    // serieMemDAO->addSerie(new Serie("Elementary", 2021, 3, 24, "Fernanda, Chika, Ste", "Enzo, Pietra", "Netflix", 10));
-    // serieMemDAO->addSerie(new Serie("Sex Education", 2024, 3, 16, "Rosa, Andre, Ste", "Enzo, Pietra", "Prime Video", 8));
-    // serieMemDAO->addSerie(new Serie("Flash", 2022, 3, 20, "Genilda, Chika, Amarildo", "Enzo, Pietra", "Max", 5));
-    // serieMemDAO->addSerie(new Serie("B99", 2022, 3, 20, "Márcia Aragão, Rosa da Silva, Fábio Porchat", "Jake Peral, Amy, Boyle", "HBO Max", 5));
+    serieMemDAO->addSerie(new Serie("Elementary", 2021, 3, 24, "Fernanda, Chika, Ste", "Enzo, Pietra", "Netflix", 10));
+    serieMemDAO->addSerie(new Serie("Sex Education", 2024, 3, 16, "Rosa, Andre, Ste", "Enzo, Pietra", "Prime Video", 8));
+    serieMemDAO->addSerie(new Serie("Flash", 2022, 3, 20, "Genilda, Chika, Amarildo", "Enzo, Pietra", "Max", 5));
+    serieMemDAO->addSerie(new Serie("B99", 2022, 3, 20, "Márcia Aragão, Rosa da Silva, Fábio Porchat", "Jake Peral, Amy, Boyle", "HBO Max", 5));
+    serieMemDAO->addSerie(new Serie("Bones", 2002, 12, 20, "Dadid Boreanaz, Emily Dechanel", "Dr. Breena, Booth", "Prime Video", 7));
+    serieMemDAO->addSerie(new Serie("Bridgerton", 2020, 3, 8, "Phoebe Dynevor, Nicola Coughlan", "Daphne Bridgerton, Penelope Featherington", "Netflix", 9));
 }
 
 ControllerSeries::~ControllerSeries()
 {
-    // delete serieMemDAO;
 }
 
 void ControllerSeries::addSerie(void)
@@ -144,23 +144,21 @@ void ControllerSeries::deleteSerie(void)
             {
                 cout << "Deseja excluir esse registro?(S/N)\nEsta acao nao pode ser desfeita.\nR:";
                 cin >> confirmation;
-                // TODO: arrumar toupper
-                toupper(confirmation);
-                if (confirmation == 'S')
+                if (confirmation == 'S' || confirmation == 's')
                 {
                     serieMemDAO->deleteSerie(id);
+                    Utils::clearConsole();
                     cout << "Serie excluida com sucesso. Retornando ao menu de series..." << endl;
-                    Utils::sleep(3);
-                    Utils::clearConsole();
+                    cout << endl;
                 }
-                else if (confirmation == 'N')
+                else if (confirmation == 'N' || confirmation == 'n')
                 {
-                    cout << "Acao cancelada. Retornado ao menu de series..." << endl;
-                    Utils::sleep(3);
                     Utils::clearConsole();
+                    cout << "Acao cancelada. Retornado ao menu de series..." << endl;
+                    cout << endl;
                 }
 
-            } while (confirmation != 'N' && confirmation != 'S');
+            } while (confirmation != 'N' && confirmation != 'S' && confirmation != 's' && confirmation != 'n');
         }
         else
         {
@@ -308,30 +306,26 @@ void ControllerSeries::confirmInclusion(Serie *serie)
 
         cout << endl;
 
-        toupper(confirmation);
-
-        if (confirmation == 'N')
+        if (confirmation == 'N' || confirmation == 'n')
         {
             serieMemDAO->deleteSerie(serie->getId());
+            Utils::clearConsole();
             cout << takeMessage(CANCELED_INCLUSION) << endl;
             cout << endl;
-            Utils::sleep(3);
-            Utils::clearConsole();
         }
-        else if (confirmation == 'S')
+        else if (confirmation == 'S' || confirmation == 's')
         {
             serieMemDAO->addSerie(serie);
+            Utils::clearConsole();
             cout << takeMessage(SUCCESS_INCLUSION) << endl;
             cout << endl;
-            Utils::sleep(3);
-            Utils::clearConsole();
         }
         else
         {
             Utils::clearConsole();
         }
 
-    } while (confirmation != 'N' && confirmation != 'S');
+    } while (confirmation != 'N' && confirmation != 'S' && confirmation != 's' && confirmation != 'n');
 }
 
 string ControllerSeries::takeMessage(Messages type)
